@@ -1,2 +1,2 @@
-# recpy
+# recipi
 Recipe database

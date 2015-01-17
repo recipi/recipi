@@ -1,0 +1,10 @@
+[run]
+branch = True
+source = src/recipi/
+include = src/recipi*
+omit =
+    src/recipi/conf/*.py
+    src/recipi/settings.py
+    *urls.py
+    src/recipi/wsgi.py
+    *migrations*

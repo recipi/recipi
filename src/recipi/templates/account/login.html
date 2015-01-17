@@ -1,0 +1,38 @@
+{% extends "recipi/web/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load foundation %}
+{% load floppyforms %}
+{% load account %}
+{% load socialaccount %}
+
+
+{% block sub-title %}{% trans 'Login' %}{% endblock sub-title %}
+
+{% block main-content %}
+	<section class="row" role="login">
+		{% if socialaccount.providers  %}
+			<div class="small-12 medium-12 large-12 columns">
+				<ul class="social-providers button-group">
+					{% for provider in socialaccount.providers %}
+						<li>
+						  <a title="{{ provider.name }}" class="button alert white glyphicons social {% provider_icon provider %}"
+							 href="{% provider_login_url provider.id process='login' %}">{% trans 'Sign in with' %} {{ provider.name }}</a>
+						</li>
+					{% endfor %}
+
+				</ul>
+			</div>
+
+			{% include "socialaccount/snippets/login_extra.html" %}
+
+			<div class="small-12 medium-12 large-12 columns">
+				<span class="login-or">{% trans 'or' %}</span>
+			</div>
+		{% endif %}
+
+		<div class="small-12 medium-12 large-12 columns">
+			{% form form using "floppyforms/layouts/default.html" with submit_title=_('Login') %}
+		</div>
+	</section>
+{% endblock %}
