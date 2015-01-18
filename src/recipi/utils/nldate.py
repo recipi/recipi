@@ -15,6 +15,11 @@ TODO: See if it makes sense to utilize `arrow` (http://crsmithdev.com/arrow/)
 
 PostgreSQL Integration: http://stackoverflow.com/a/19334099
 
+More ideas:
+
+ * Rebase to use `parsedatetime` and support locales (german etc)
+ * steal from https://github.com/kvh/recurrent/blob/master/src/recurrent/event_parser.py
+
 """
 from collections import namedtuple
 from datetime import datetime
