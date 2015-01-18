@@ -11,6 +11,8 @@ and not supposed to work reliably. But, what works is cool:
 >>> parse('every tuesday vegan')
 >>> Rule(date=None, rule=<dateutil.rrule.rrule object at 0x7f0078062e48>, details='vegan')
 
+TODO: See if it makes sense to utilize `arrow` (http://crsmithdev.com/arrow/)
+
 """
 from collections import namedtuple
 from datetime import datetime
