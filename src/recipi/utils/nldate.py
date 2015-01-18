@@ -12,7 +12,6 @@ and not supposed to work reliably. But, what works is cool:
 >>> Rule(date=None, rule=<dateutil.rrule.rrule object at 0x7f0078062e48>, details='vegan')
 
 """
-
 from collections import namedtuple
 from datetime import datetime
 from dateutil import parser, rrule
@@ -83,7 +82,7 @@ def convert_rrule_to_dict(rrule):
     retval = {}
     for attr in RRULE_ATTRIBUTES:
         value = getattr(rrule, '_%s' % attr, None)
-        if not value and not isinstance(value, (str, int)) and not value is None:
+        if not value and not isinstance(value, (str, int)) and value is not None:
             value = None
         retval[attr] = value
     return retval
@@ -198,6 +197,7 @@ def parse(string, *args, **kwargs):
             ignore = True
         elif type == 'detail':
             details.append(value)
+            values.append(value)
         else:
             values.append(value)
 
@@ -206,6 +206,7 @@ def parse(string, *args, **kwargs):
             if orig_today:
                 rrule_args['dtstart'] = orig_today
             else:
+                kwargs['fuzzy'] = True
                 rrule_args['dtstart'] = parser.parse(u' '.join(values), *args, **kwargs)
         return ParseResult(
             date=None,
@@ -215,7 +216,7 @@ def parse(string, *args, **kwargs):
     else:
         kwargs['fuzzy'] = True
         return ParseResult(
-            date=arser.parse(u' '.join(values), *args, **kwargs),
+            date=parser.parse(u' '.join(values), *args, **kwargs),
             rule=None,
             details=u' '.join(details)
         )
