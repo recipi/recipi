@@ -21,6 +21,8 @@ from django.utils.http import urlquote
 # General stuff:
 #   * http://platform.fatsecret.com/api/Default.aspx?screen=cu
 #      -> Ask them regarding API usage.
+#   * http://www.nutritionix.com/api
+#   * http://www.crowdsourcingnutritionfacts.info/about/
 
 Response = namedtuple(
     'Response',
