@@ -18,6 +18,9 @@ from django.utils.http import urlquote
 #                                           them.
 #   * http://www.codecheck.info/ - http://www.codecheck.info/essen/suesswaren/schokoladetafeln/ean_4012362024507/id_597214/Edel_Bitter_Schokolade.pro  # noqa
 #   * http://fddb.info/db/i18n/about/de_api.html - http://fddb.info/db/de/lebensmittel/diverse_edel_bitter_75prozent_cacao/index.html  # noqa
+# General stuff:
+#   * http://platform.fatsecret.com/api/Default.aspx?screen=cu
+#      -> Ask them regarding API usage.
 
 Response = namedtuple(
     'Response',
