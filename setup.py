@@ -60,6 +60,7 @@ install_requires = [
 
     # Intelligent text parsing.
     'nltk>=3.0.1,<3.1',
+    'numpy>=1.9.1,<2.0',
     'python-dateutil>=2.4.0,<2.5',
 ]
 
