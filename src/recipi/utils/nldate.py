@@ -21,15 +21,26 @@ More ideas:
  * steal from https://github.com/kvh/recurrent/blob/master/src/recurrent/event_parser.py
 
 """
-from collections import namedtuple
 from datetime import datetime
 from dateutil import parser, rrule
 from dateutil.relativedelta import relativedelta
 
 import nltk
+from nltk.stem.snowball import EnglishStemmer
 
 
-ParseResult = namedtuple('Rule', 'date, rule, details')
+class ParseResult(object):
+
+    def __init__(self, date=None, rule=None, details=None):
+        self.date = date
+        self.rule = rule
+        self.details = details
+
+    @property
+    def stemmed_details(self):
+        stemmer = EnglishStemmer(ignore_stopwords=True)
+        return ' '.join(stemmer.stem(word) for word in self.details.split())
+
 
 RRULE_ATTRIBUTES = frozenset((
     'freq', 'dtstart', 'interval', 'count', 'until',
@@ -169,11 +180,17 @@ def parse(string, *args, **kwargs):
             else:
                 values.append(value)
         elif type == 'start':
-            rrule_args['dtstart'] = parser.parse(next()[0], fuzzy=True)
-            recur = True
+            try:
+                rrule_args['dtstart'] = parser.parse(next()[0], fuzzy=False)
+                recur = True
+            except ValueError:
+                details.append(value)
         elif type == 'end':
-            rrule_args['until'] = parser.parse(next()[0], fuzzy=True)
-            recur = True
+            try:
+                rrule_args['until'] = parser.parse(next()[0], fuzzy=False)
+                recur = True
+            except ValueError:
+                details.append(value)
         elif type == 'time_detail':
             if recur:
                 val = parser.parse(next()[0], fuzzy=True)
@@ -220,12 +237,12 @@ def parse(string, *args, **kwargs):
         return ParseResult(
             date=None,
             rule=rrule.rrule(**rrule_args),
-            details=u' '.join(details)
+            details=u' '.join(word.lower() for word in details)
         )
     else:
         kwargs['fuzzy'] = True
         return ParseResult(
             date=parser.parse(u' '.join(values), *args, **kwargs),
             rule=None,
-            details=u' '.join(details)
+            details=u' '.join(word.lower() for word in details)
         )

@@ -155,6 +155,20 @@ class TestRecursionParser(TestCase):
             ]
         )
 
+    def test_stemmed_details(self):
+        result = parse('She wants to eat vegan every tuesday', default=datetime(2011, 5, 10))
+        # none inclusive so we have two tuesdays in the result.
+        assert (
+            result.rule.between(datetime(2011, 5, 10), datetime(2011, 5, 30))
+            == [
+                datetime(2011, 5, 17, 0, 0),
+                datetime(2011, 5, 24, 0, 0)
+            ]
+        )
+
+        assert result.details == 'she wants to eat vegan'
+        assert result.stemmed_details == 'she want to eat vegan'
+
 
 class DateUtilCompatibilityParserTest(TestCase):
     """These tests were taken from python-dateutil"""

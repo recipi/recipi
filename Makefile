@@ -39,6 +39,9 @@ develop: deps
 	# Extract CLDR from babel source installation
 	@python extras/import_cldr.py
 
+	# Download nltk corpus
+	@python -m nltk.downloader all
+
 
 docs: clean-build
 	pip install --use-wheel "file://`pwd`#egg=recipi[docs]"
