@@ -36,7 +36,10 @@ test_requires = [
 install_requires = [
     # General dependencies
     'django>=1.7.1,<1.8',
+
+    # TODO: Remove once Django 1.8 is out.
     'djorm-pgarray>=1.2,<1.3',
+    'django-timedeltafield>=0.7.3,<0.8',
 
     # Static files support
     'whitenoise>=1.0.6,<1.1',
