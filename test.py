@@ -17,6 +17,13 @@ training = {
     ],
 }
 
+from nltk.corpus import stopwords as corpus_stopwords
+from nltk.stem.snowball import EnglishStemmer
+
+stemmer = EnglishStemmer(ignore_stopwords=True)
+
+stopwords = corpus_stopwords.words('english')
+
 # Set up a list that will contain all of our tagged examples,
 # which we will pass into the classifier at the end.
 training_set = []
@@ -34,7 +41,7 @@ for key, val in training.items():
 
         # For this example, it's a good idea to normalize for case.
         # You may or may not need to do this.
-        features = [i.lower() for i in features]
+        features = [stemmer.stem(i.lower()) for i in features if i not in stopwords]
         
         # Each feature needs a value. A typical use for a case like this
         # is to use True or 1, though you can use almost any value for
