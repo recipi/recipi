@@ -24,6 +24,11 @@ from django.utils.http import urlquote
 #   * http://www.nutritionix.com/api
 #   * http://www.crowdsourcingnutritionfacts.info/about/
 
+# USDA:
+# https://github.com/czarandy/usda
+# https://github.com/notanumber/django-usda/blob/master/usda/models.py
+# https://github.com/schirinos/nutrient-db/blob/master/nutrientdb.py
+
 Response = namedtuple(
     'Response',
     'valid, reason, name, number, description, price, ratingsup, ratingsdown'
