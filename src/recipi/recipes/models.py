@@ -1,12 +1,59 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 from djorm_pgarray.fields import TextArrayField
 from timedelta import fields as timedelta_fields
 
 from recipi.utils.db.uuid import UUIDField
 
 
+INGREDIENT_UNITS = {
+    'mg': _('Milligram'),
+    'g': _('Gram'),
+    'kg': _('Kilogram'),
+
+    # TODO: These are experimental, maybe we need something different
+    #       for these kind of 'units'
+    'sl': _('Slice'),
+}
+
+
 class Ingredient(models.Model):
-    pass
+    name = models.CharField(max_length=256)
+
+    # TODO: There is tooooons more: http://ndb.nal.usda.gov/ndb/foods/show/3044
+    # I tried to find the most important values for now (cg)
+    # All fields allow values up to 9999.99 - I think this should suffice (cg)
+
+    calories = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    carbohydrate = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    protein = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    saturated_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    polyunsaturated_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    monounsaturated_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    trans_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    cholesterol = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    sodium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    potassium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    fiber = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    sugar = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    vitamin_a = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    vitamin_c = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    calcium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    iron = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+
+
+class RecipeIngredient(models.Model):
+    # TODO: Figure out if this makes sense.
+    # Currently this model would be used for simple ingredients such as
+    # "one slice of brown bread" and more specific ingredients such as
+    # "350g of white flour". Imho this works as not every
+    # recipe will be so detailed (e.g imagine a jelly-bread recipe)
+    # (cg)
+    recipe = models.ForeignKey('Recipe')
+    ingredient = models.ForeignKey(Ingredient)
+    metric_unit = models.CharField(max_length=3, choices=INGREDIENT_UNITS.items())
+    number = models.PositiveIntegerField()
 
 
 class Cuisine(models.Model):
@@ -23,11 +70,13 @@ class Recipe(models.Model):
     # account for automatic imports.
     author = models.ForeignKey('accounts.User')
 
-    description = models.TextField()
+    description = models.TextField(blank=True)
+    serving_description = models.TextField(blank=True)
 
     ingredients = models.ManyToManyField(
         Ingredient,
         related_name='recipes',
+        through='RecipeIngredient',
         blank=True
     )
 
