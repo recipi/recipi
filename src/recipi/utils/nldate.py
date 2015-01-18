@@ -13,6 +13,8 @@ and not supposed to work reliably. But, what works is cool:
 
 TODO: See if it makes sense to utilize `arrow` (http://crsmithdev.com/arrow/)
 
+PostgreSQL Integration: http://stackoverflow.com/a/19334099
+
 """
 from collections import namedtuple
 from datetime import datetime
