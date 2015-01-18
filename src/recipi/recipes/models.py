@@ -30,7 +30,10 @@ class Ingredient(models.Model):
     # identically. E.g fatsecret.com gives these values only as a
     # "percentage of daily Calcium/Iron" etc based on a 2000 calorie diet.
     vitamin_a = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    vitamin_b = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
     vitamin_c = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    vitamin_d = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+
     calcium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
     iron = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
 
