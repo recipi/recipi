@@ -1,6 +1,6 @@
 from recipi.api.base import Endpoint, ListEndpoint
-from recipi.models.user import User
-from recipi.serializers.user import UserSerializer
+from recipi.api.serializers.user import UserSerializer
+from recipi.accounts.models import User
 
 
 class UserEndpoint(Endpoint):

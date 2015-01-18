@@ -1,7 +1,7 @@
 import floppyforms.__future__ as forms
 from django.utils.translation import ugettext_lazy as _
 
-from recipi.models.user import User
+from recipi.accounts.models import User
 
 
 class RegisterForm(forms.ModelForm):

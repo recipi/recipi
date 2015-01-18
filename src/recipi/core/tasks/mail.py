@@ -1,6 +1,6 @@
 from django.core.mail import send_mail as django_send_mail
 
-from recipi.tasks import celery
+from recipi.core.tasks import celery
 from recipi.utils.logging import logged
 
 

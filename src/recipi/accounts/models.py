@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, UserManager as BaseUserManager
 
-from recipi.tasks.mail import send_mail_async
+from recipi.core.tasks.mail import send_mail_async
 from recipi.utils.avatar import get_profile_image
 from recipi.utils.db.uuid import UUIDField
 

@@ -2,7 +2,7 @@ import pytest
 import mock
 from django.core import mail
 
-from recipi.models.user import User
+from recipi.accounts.models import User
 from recipi.tests.factories.user import UserFactory
 
 
@@ -22,14 +22,14 @@ class TestUserModel:
         assert message.to == [self.user.email]
         assert message.body == 'message'
 
-    @mock.patch('recipi.models.user.send_mail_async.delay')
+    @mock.patch('recipi.accounts.models.send_mail_async.delay')
     def test_send_mail_called_async(self, send_mail_async):
         self.user.send_mail('subject', 'message')
         send_mail_async.assert_called_once_with('subject', 'message',
             mock.ANY, [self.user.email])
 
-    @mock.patch('recipi.tasks.mail.django_send_mail')
-    @mock.patch('recipi.models.user.send_mail_async.retry')
+    @mock.patch('recipi.core.tasks.mail.django_send_mail')
+    @mock.patch('recipi.accounts.models.send_mail_async.retry')
     def test_send_mail_retried_on_error(self, retry, django_send_mail):
         django_send_mail.side_effect = Exception()
         self.user.send_mail('subject', 'message')

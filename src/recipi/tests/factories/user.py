@@ -1,7 +1,7 @@
 import factory
 from django.contrib.auth.hashers import make_password
 
-from recipi.models.user import User
+from recipi.accounts.models import User
 
 
 class UserFactory(factory.DjangoModelFactory):

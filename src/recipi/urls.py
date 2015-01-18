@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.conf.urls import url, include
 
-from recipi.web import views
+from recipi.core import views as core_views
 
 
 urlpatterns = [
     url(r'^$',
-        views.IndexView.as_view(),
+        core_views.IndexView.as_view(),
         name='recipi-index'),
 
     url(r'^account/', include('allauth.urls')),

@@ -1,4 +1,4 @@
-from recipi.tasks import celery
+from recipi.core.tasks import celery
 
 
 class TestCeleryConfig:

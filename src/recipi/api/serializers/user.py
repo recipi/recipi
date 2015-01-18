@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from recipi.models.user import User
+from recipi.accounts.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):

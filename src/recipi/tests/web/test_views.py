@@ -6,4 +6,4 @@ class TestIndexView(object):
 
     def test_index(self, client):
         response = client.get('/')
-        assert response.template_name == ['recipi/web/index.html']
+        assert response.template_name == ['recipi/core/index.html']

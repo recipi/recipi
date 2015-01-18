@@ -47,7 +47,9 @@ INSTALLED_APPS = (
     'allauth.socialaccount.providers.google',
 
     # Recipi apps
-    'recipi',
+    'recipi.core',
+    'recipi.accounts',
+    'recipi.recipes'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,14 +60,14 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'recipi.middlewares.server_header.ServerHeaderMiddleware'
+    'recipi.core.middlewares.server_header.ServerHeaderMiddleware'
 )
 
 ROOT_URLCONF = 'recipi.urls'
 
 WSGI_APPLICATION = 'recipi.wsgi.application'
 
-AUTH_USER_MODEL = 'recipi.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 DATABASES = {
     'default': {
@@ -82,7 +84,7 @@ TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + (
 
     # Overwrite the allauth context processor because... it actively
     # verifies that the allauth processor exists.
-    'recipi.context_processors.social.socialaccount'
+    'recipi.accounts.context_processors.social.socialaccount'
 )
 
 STATICFILES_DIRS = (
@@ -148,7 +150,7 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_TRACK_STARTED = True
 
 CELERY_IMPORTS = (
-    'recipi.tasks.mail',
+    'recipi.core.tasks.mail',
 )
 
 CELERY_QUEUES = (
@@ -195,13 +197,13 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Recipi - '
 
-ACCOUNT_SIGNUP_FORM_CLASS = 'recipi.web.forms.RegisterForm'
+ACCOUNT_SIGNUP_FORM_CLASS = 'recipi.accounts.forms.RegisterForm'
 
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False
 
 ACCOUNT_UNIQUE_EMAIL = True
 
-ACCOUNT_USER_DISPLAY = 'recipi.utils.get_user_name'
+ACCOUNT_USER_DISPLAY = 'recipi.accounts.utils.get_user_name'
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
 
