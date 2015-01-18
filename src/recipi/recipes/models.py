@@ -1,20 +1,8 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from djorm_pgarray.fields import TextArrayField
 from timedelta import fields as timedelta_fields
 
 from recipi.utils.db.uuid import UUIDField
-
-
-INGREDIENT_UNITS = {
-    'mg': _('Milligram'),
-    'g': _('Gram'),
-    'kg': _('Kilogram'),
-
-    # TODO: These are experimental, maybe we need something different
-    #       for these kind of 'units'
-    'sl': _('Slice'),
-}
 
 
 class Ingredient(models.Model):
@@ -56,7 +44,9 @@ class RecipeIngredient(models.Model):
     # (cg)
     recipe = models.ForeignKey('Recipe')
     ingredient = models.ForeignKey(Ingredient)
-    metric_unit = models.CharField(max_length=3, choices=INGREDIENT_UNITS.items())
+
+    # TODO: Normalize units in `recipes.constants`
+    metric_unit = models.CharField(max_length=3, choices=())
     number = models.PositiveIntegerField()
 
 
