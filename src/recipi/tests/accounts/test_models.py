@@ -3,7 +3,7 @@ import mock
 from django.core import mail
 
 from recipi.accounts.models import User
-from recipi.tests.factories.user import UserFactory
+from recipi.tests.factories.accounts import UserFactory
 
 
 @pytest.mark.django_db
