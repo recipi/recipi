@@ -35,8 +35,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     id = UUIDField(auto=True, primary_key=True)
 
-    email = models.EmailField(_('Email'), max_length=254, unique=True)
-    name = models.TextField(_('Name'), max_length=100)
+    email = models.EmailField(_('Email'), max_length=256, unique=True)
+    name = models.CharField(_('Name'), max_length=256)
     is_active = models.BooleanField(
         _('active'), default=True,
         help_text=_('Designates whether this user should be treated as '
