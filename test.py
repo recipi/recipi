@@ -3,7 +3,7 @@ from nltk.classify import MaxentClassifier
 from nltk.tag import pos_tag, map_tag
 from nltk.corpus import stopwords as corpus_stopwords
 from nltk.stem.snowball import EnglishStemmer
-
+from textblob import TextBlob
 
 # Set up our training material in a nice dictionary.
 training = {
@@ -75,8 +75,17 @@ classifier = MaxentClassifier.train(training_set)
 print()
 print()
 
-classify(get_features('Please use two eggs'))
-classify(get_features('One apple, a dash cider and the cocoa pulver'))
-classify(get_features('Please prepare the oven while waiting'))
-classify(get_features('Dont forget to buy apples'))
-classify(get_features('Hey, this is yet another great day to cook.'))
+tests = [
+    'Please use two eggs',
+    'One apple, a dash of cider and cocoa pulver',
+    'Please prepare the oven while waiting',
+    'Dont forget to buy apples',
+    'Hey, this is yet another great day to cook.',
+]
+
+for line in tests:
+    classify(get_features(line))
+    blob = TextBlob(line)
+    print(line)
+    print(blob.translate(to='de'))
+    print()
