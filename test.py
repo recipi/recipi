@@ -1,5 +1,9 @@
 import nltk
 from nltk.classify import MaxentClassifier
+from nltk.tag import pos_tag, map_tag
+from nltk.corpus import stopwords as corpus_stopwords
+from nltk.stem.snowball import EnglishStemmer
+
 
 # Set up our training material in a nice dictionary.
 training = {
@@ -17,13 +21,9 @@ training = {
     ],
 }
 
-from nltk.corpus import stopwords as corpus_stopwords
-from nltk.stem.snowball import EnglishStemmer
-
 stemmer = EnglishStemmer(ignore_stopwords=True)
 
 stopwords = corpus_stopwords.words('english')
-
 
 
 def get_features(text):
@@ -33,11 +33,11 @@ def get_features(text):
     for sentence in sentences:
         words = words + nltk.word_tokenize(sentence)
 
-    # part of speech tag each of the words
-    pos = nltk.pos_tag(words)
-
     # Then, convert the words to lowercase like before
     words = [i.lower() for i in words if i not in stopwords]
+
+    # part of speech tag each of the words
+    pos = [(word, map_tag('en-ptb', 'universal', tag)) for word, tag in nltk.pos_tag(words)]
 
     # Grab the trigrams
     trigrams = nltk.trigrams(words)
@@ -78,5 +78,5 @@ print()
 classify(get_features('Please use two eggs'))
 classify(get_features('One apple, a dash cider and the cocoa pulver'))
 classify(get_features('Please prepare the oven while waiting'))
-classify(get_features('Don\'t forget to buy apples'))
+classify(get_features('Dont forget to buy apples'))
 classify(get_features('Hey, this is yet another great day to cook.'))
