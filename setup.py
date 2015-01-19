@@ -62,6 +62,7 @@ install_requires = [
     'nltk>=3.0.1,<3.1',
     'numpy>=1.9.1,<2.0',
     'python-dateutil>=2.4.0,<2.5',
+    'textblob>=0.9.0,<1.0',
 ]
 
 dev_requires = [
