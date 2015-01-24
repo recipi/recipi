@@ -3,6 +3,9 @@ from djorm_pgarray.fields import TextArrayField
 
 from recipi.utils.db.uuid import UUIDField
 
+# TODO: Figure out what the fucking hell a LanguaL factor is
+# and how to use it (Pages 31, 32, TAble 6, 7 in sr27_doc.pdf)
+
 # This is a *HIGHLY* experimental structure that mostly
 # follows the structure of the USDA database.
 # It's entirely possible to change over time once we actually
@@ -35,6 +38,16 @@ from recipi.utils.db.uuid import UUIDField
 # V = nutrient value per 100 g (Nutr_Val in the Nutrient Data file), and
 # W = g weight of portion (Gm_Wgt in the Weight file).
 
+class FoodGroup(models.Model):
+    id = UUIDField(auto=True, primary_key=True)
+
+    # 4-digit code identifying a food group. Only
+    # the first 2 digits are currently assigned.
+    # TODO: decide if this can be a proper primary key.
+    code = models.CharField(max_length=4)
+
+    name = models.CharField(max_length=60)
+
 
 class FoodDescription(models.Model):
     """Descriptions and group designators for all food items.
@@ -53,10 +66,11 @@ class FoodDescription(models.Model):
 
     # 5-digit nutrient databank number that uniquely identifies
     # a food item.
+    # TODO: decide if this can be a proper primary key.
     ndb_no = models.CharField(max_length=5)
 
-    # 4-digit code indicating the food group to which a food item belongs
-    food_group = models.CharField(max_length=4)
+    # NOTE: In database import identified by the 4-digit code in `FoodGroup.code`
+    food_group = models.ForeignKey(FoodGroup)
 
     # Description of this food item
     long_description = models.TextField()
