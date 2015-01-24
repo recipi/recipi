@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     # Recipi apps
     'recipi.core',
     'recipi.accounts',
+    'recipi.food',
     'recipi.recipes'
 )
 
