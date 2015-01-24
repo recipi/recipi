@@ -1,0 +1,16 @@
+{
+	"name": "recipi",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"foundation": "zurb/bower-foundation#5.4.7",
+		"select2": "ivaynberg/select2#3.5.2",
+		"backbone": "jashkenas/backbone",
+		"jquery": "jquery/jquery"
+	},
+	"authors": [
+		"Christopher Grebs <cg@webshox.org>",
+		"Benjamin Banduhn <deluge@banduhn.com>"
+	],
+	"license": "ISC"
+}
