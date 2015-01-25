@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from djorm_pgarray.fields import TextArrayField
 
+from recipi.utils.db import sane_repr
 from recipi.utils.db.uuid import UUIDField
 
 # TODO: Figure out what the fucking hell a LanguaL factor is
@@ -50,8 +51,7 @@ class FoodGroup(models.Model):
 
     name = models.CharField(max_length=60)
 
-    def __repr__(self):
-        return '<FoodGroup (code={}, name={})>'.format(self.code, self.name)
+    __repr__ = sane_repr('code', 'name')
 
 
 class FoodDescription(models.Model):
@@ -93,7 +93,7 @@ class FoodDescription(models.Model):
     # for Dietary Studies (FNDDS) and thus has a complete nutrient profile
     # for the 65 FNDDS nutrients.
     # TODO: find out what to do with that information.
-    survey = models.BooleanField(default=False, blank=True)
+    survey = models.NullBooleanField(default=None, blank=True)
 
     # Description of inedible parts of a food item (refuse), such as seeds or bone.
     refuse_description = models.TextField(blank=True)
@@ -150,6 +150,8 @@ class FoodDescription(models.Model):
 
     # Factor for calculating calories from carbohydrate
     carbohydrate_factor = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
+
+    __repr__ = sane_repr('ndb_number', 'food_group', 'long_desc')
 
 
 # TODO: Move to jsonb field in `FoodDescription`?
