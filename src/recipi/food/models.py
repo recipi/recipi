@@ -72,7 +72,7 @@ class FoodDescription(models.Model):
     # 5-digit nutrient databank number that uniquely identifies
     # a food item.
     # TODO: decide if this can be a proper primary key.
-    ndb_no = models.CharField(max_length=5)
+    ndb_number = models.CharField(max_length=5)
 
     # NOTE: In database import identified by the 4-digit code in `FoodGroup.code`
     food_group = models.ForeignKey(FoodGroup)
