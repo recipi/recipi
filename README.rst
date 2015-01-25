@@ -6,9 +6,6 @@ Recipi - nutrition database and meal planner.
     :target: https://readthedocs.org/projects/recipi/?badge=latest
     :alt: Documentation Status
 
-.. image:: https://readthedocs.org/projects/EnTeQuAK/recipi/?version=latest
-    :target: http://recipi.readthedocs.org/en/latest/
-
 .. figure:: https://recipi.readthedocs.org/en/latest/_static/logo.png
    :align: right
    :target: http://thenounproject.com/term/pear/56646/
