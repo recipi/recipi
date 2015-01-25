@@ -25,14 +25,6 @@ recipi.apps module
     :undoc-members:
     :show-inheritance:
 
-recipi.urls module
-------------------
-
-.. automodule:: recipi.urls
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 recipi.wsgi module
 ------------------
 

@@ -28,14 +28,6 @@ recipi.conf.test module
     :undoc-members:
     :show-inheritance:
 
-recipi.conf.travis module
--------------------------
-
-.. automodule:: recipi.conf.travis
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------

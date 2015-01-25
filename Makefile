@@ -45,7 +45,7 @@ develop: deps
 
 docs: clean-build
 	pip install --use-wheel "file://`pwd`#egg=recipi[docs]"
-	sphinx-apidoc --force -o docs/source/modules/ src/recipi src/recipi/migrations src/recipi/tests src/recipi/settings.py rc/recipi/conf/travis.py
+	sphinx-apidoc --force -o docs/source/modules/ src/recipi src/recipi/migrations src/recipi/tests src/recipi/settings.py src/recipi/conf/travis.py src/recipi/urls.py
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
