@@ -30,7 +30,8 @@ Installation
     $ # Clone repository
     $ git clone git@github.com:EnTeQuAk/recipi.git
 
-    $ # Activate Environment and install
+    $ # Activate Environment and install. Note that this might take a while
+    $ # and actually downloads tons of stuff (used for NLTK)
     $ workon recipi
     $ make develop
 
