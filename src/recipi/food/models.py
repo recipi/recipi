@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 from djorm_pgarray.fields import TextArrayField
 
 from recipi.utils.db.uuid import UUIDField
@@ -142,3 +143,75 @@ class FoodDescription(models.Model):
 
     # Factor for calculating calories from carbohydrate
     carbohydrate_factor = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
+
+
+# TODO: Move to jsonb field in `FoodDescription`?
+class Weight(models.Model):
+    """Contains the weight in grams of a number of common measures for each food item."""
+    id = UUIDField(auto=True, primary_key=True)
+
+    food = models.ForeignKey(FoodDescription)
+
+    # Unit modifier (for example 1 in "1 cup")
+    amount = models.DecimalField(max_digits=5, decimal_places=2)
+
+    # Description (for example, cup, diced, and 1-inch pieces)
+    description = models.TextField()
+
+    # Weight in gram
+    weight = models.DecimalField(max_digits=7, decimal_places=2)
+
+    # Number of data points.
+    data_points = models.PositiveIntegerField(default=0)
+
+    # Standard deviation
+    deviation = models.DecimalField(max_digits=7, decimal_places=3, default=0.0)
+
+
+class Foonote(models.Model):
+    """Contains additional information.
+
+    About:
+
+     * food item
+     * household weight
+     * nutrient value
+    """
+    # Type of footnotes.
+    TYPE_FOOD = 'D'
+    TYPE_MEASURE = 'M'
+    TYPE_NUTRIENT = 'N'
+
+    id = UUIDField(auto=True, primary_key=True)
+
+    # Sequence number. If a given footnote applies
+    # to more than one nutrient number, the same `number` is used.
+    number = models.PositiveIntegerField()
+
+    # Type of footnote:
+    # If `TYPE_NUTRIENT`, then `nutrient_number` is also set as it applies
+    # for this nutrient specifically.
+    type = models.CharField(max_length=1, choices=(
+        (TYPE_FOOD, _('Food ')),
+        (TYPE_MEASURE, _('Measure')),
+        (TYPE_NUTRIENT, _('Nutrient'))
+    ))
+
+    nutrient_number = models.PositiveIntegerField(default=0)
+
+    text = models.TextField()
+
+# are provided, which are the first two common measures in the Weight file for each NDB
+# number. To obtain values per one of the common measures, multiply the value in the
+# desired nutrient field by the value in the desired common measure field and divide by
+# 100. For example, to calculate the amount of fat in 1 tablespoon of butter (NDB No. 01001):
+
+# VH=(N*CM)/100
+# where:
+# VH = the nutrient content per the desired common measure,
+# N = the nutrient content per 100 g,
+# For NDB No. 01001, fat = 81.11 g/100 g
+# CM = grams of the common measure.
+# For NDB No. 01001, 1 tablespoon = 14.2 g
+# So using this formula for the above example:
+# VH = (81.11*14.2)/100 = 11.52 g fat in 1 tablespoon of butter
