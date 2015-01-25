@@ -87,6 +87,8 @@ class FoodDescription(models.Model):
     # For example "soda" or "pop" for "carbonated beverages".
     common_names = TextArrayField(blank=True)
 
+    manufacturer_name = models.TextField(blank=True)
+
     # Indicates if the food item is used in the USDA Food and Nutrient Database
     # for Dietary Studies (FNDDS) and thus has a complete nutrient profile
     # for the 65 FNDDS nutrients.
