@@ -1,4 +1,5 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 
 def sane_repr(*attrs):
     if 'id' not in attrs and 'pk' not in attrs:
