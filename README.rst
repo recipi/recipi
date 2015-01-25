@@ -2,11 +2,9 @@
 Recipi - nutrition database and meal planner.
 =============================================
 
-.. image:: https://badge.fury.io/py/recipi.png
-    :target: http://badge.fury.io/py/recipi
-
-.. image:: https://travis-ci.org/EnTeQuAk/recipi.png?branch=master
-    :target: https://travis-ci.org/EnTeQuAk/recipi
+.. image:: https://readthedocs.org/projects/recipi/badge/?version=latest
+    :target: https://readthedocs.org/projects/recipi/?badge=latest
+    :alt: Documentation Status
 
 .. image:: https://readthedocs.org/projects/EnTeQuAK/recipi/?version=latest
     :target: http://recipi.readthedocs.org/en/latest/
