@@ -37,7 +37,7 @@ Response = namedtuple(
 
 class UPCDBClient(requests.Session):
     API_URL = 'http://api.upcdatabase.org/json/'
-    USER_AGENT = 'Recipi UPCDB Api Client'
+    USER_AGENT = 'recipi UPCDB Api Client'
 
     def __init__(self, api_key):
         super(UPCDBClient, self).__init__()

@@ -4,4 +4,4 @@ from django.utils.translation import ugettext_lazy as _
 
 class RecipiConfig(AppConfig):
     name = 'recipi'
-    verbose_name = _('Recipi')
+    verbose_name = _('recipi')

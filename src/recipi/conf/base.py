@@ -46,7 +46,7 @@ INSTALLED_APPS = (
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
 
-    # Recipi apps
+    # recipi apps
     'recipi.core',
     'recipi.accounts',
     'recipi.food',
@@ -196,7 +196,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
-ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Recipi - '
+ACCOUNT_EMAIL_SUBJECT_PREFIX = 'recipi - '
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'recipi.accounts.forms.RegisterForm'
 

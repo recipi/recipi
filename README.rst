@@ -1,5 +1,5 @@
 =============================================
-Recipi - nutrition database and meal planner.
+recipi - nutrition database and meal planner.
 =============================================
 
 .. image:: https://readthedocs.org/projects/recipi/badge/?version=latest
