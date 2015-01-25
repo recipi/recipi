@@ -25,7 +25,6 @@ master_doc = 'index'
 project = u'recipi'
 copyright = u'2015, Benjamin Banduhn, Christopher Grebs'
 
-import ipdb; ipdb.set_trace()
 dist = pkg_resources.get_distribution('recipi')
 version = release = dist.version
 
