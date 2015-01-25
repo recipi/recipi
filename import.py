@@ -8,14 +8,19 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'recipi.settings')
 import django
 django.setup()
 
-from recipi.food.models import FoodGroup
+from recipi.food.models import FoodGroup, FoodDescription
+
+
+def _cl(string):
+    return [x.strip() for x in string.split(',')]
 
 
 def get_reader(data, fieldnames):
-    return csv.DictReader(data, fieldnames=fieldnames, delimiter='^', quotechar='~')
+    return csv.DictReader(
+        data, fieldnames=fieldnames, delimiter='^', quotechar='~')
 
 
-def import_food_groups(data):
+def process_food_groups(data):
     objects_updated, objects_created = 0, 0
 
     for row in get_reader(data, ('fdgr_cd', 'fdgr_desc')):
@@ -40,9 +45,56 @@ def import_food_groups(data):
     print('Updated {0:d} food groups'.format(objects_updated))
 
 
+def process_food_description(data):
+    objects_updated, objects_created = 0, 0
+
+    fieldnames = (
+        'ndb_no', 'fdgrp_cd', 'long_desc', 'short_desc', 'com_name',
+        'manufac_name', 'survey', 'ref_desc', 'refuse', 'sci_name',
+        'n_factor', 'pro_factor', 'fat_factor', 'cho_factor'
+    )
+
+    food_groups = {group.code: group for group in FoodGroup.objects.all()}
+
+    for row in get_reader(data, fieldnames):
+        print('Importing row {0}'.format(row))
+
+        survey = row.get('survey', None)
+
+        obj, created = FoodDescription.objects.update_or_create(
+            ndb_number=row['ndb_no'],
+            defaults={
+                'food_group': food_groups[row['fdgrp_cd']],
+                'long_description': row['long_desc'],
+                'short_description': row['short_desc'],
+                'common_names': _cl(row.get('com_name', '')),
+                'manufacturer_name': row.get('manufac_name', ''),
+                'survey': survey == 'Y' if survey is not None else None,
+                'refuse_description': row.get('ref_desc', ''),
+                'refuse': int(row.get('refuse', 0) or 0),
+                'scientific_name': row.get('scientific_name', ''),
+                'nitrogen_factor': float(row.get('n_factor', 0.0) or 0.0),
+                'protein_factor': float(row.get('pro_factor', 0.0) or 0.0),
+                'fat_factor': float(row.get('fat_factor', 0.0) or 0.0),
+                'carbohydrate_factor': float(row.get('cho_factor', 0.0) or 0.0),
+            }
+        )
+
+        if created:
+            print('Created {0}'.format(repr(obj)))
+            objects_created += 1
+        else:
+            print('Updated {0}'.format(repr(obj)))
+            objects_updated += 1
+
+    print('Created {0:d} new food descriptions'.format(objects_created))
+    print('Updated {0:d} food descriptions'.format(objects_updated))
+
+
 def import_usda(basepath):
     processors = {
-        'FD_GROUP.txt': import_food_groups
+        'FD_GROUP.txt': process_food_groups,
+        'FOOD_DES.txt': process_food_description,
     }
 
     for fname, handler in processors.items():
