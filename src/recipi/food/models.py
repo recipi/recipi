@@ -151,7 +151,7 @@ class FoodDescription(models.Model):
     # Factor for calculating calories from carbohydrate
     carbohydrate_factor = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
 
-    __repr__ = sane_repr('ndb_number', 'food_group', 'long_desc')
+    __repr__ = sane_repr('ndb_number', 'food_group', 'long_description')
 
 
 # TODO: Move to jsonb field in `FoodDescription`?
