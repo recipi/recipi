@@ -49,6 +49,9 @@ class FoodGroup(models.Model):
 
     name = models.CharField(max_length=60)
 
+    def __repr__(self):
+        return '<FoodGroup (code={}, name={})>'.format(self.code, self.name)
+
 
 class FoodDescription(models.Model):
     """Descriptions and group designators for all food items.
