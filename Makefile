@@ -21,10 +21,6 @@ clean: clean-build clean-pyc
 deps:
 	@echo "--> Installing python dependencies"
 	pip install --upgrade pip setuptools wheel
-	pip install --use-wheel -e .
-	pip install --use-wheel "file://`pwd`#egg=recipi[tests]"
-	pip install --use-wheel "file://`pwd`#egg=recipi[postgresql]"
-	pip install --use-wheel "file://`pwd`#egg=recipi[redis]"
 	pip install --use-wheel --upgrade -r requirements.txt
 	@echo ""
 

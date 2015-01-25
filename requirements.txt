@@ -1,3 +1,5 @@
 -e .
 -e .[docs]
+-e .[postgresql]
+-e .[tests]
 -r requirements/base.txt
