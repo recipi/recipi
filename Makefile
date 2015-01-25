@@ -25,7 +25,7 @@ deps:
 	pip install --use-wheel "file://`pwd`#egg=recipi[tests]"
 	pip install --use-wheel "file://`pwd`#egg=recipi[postgresql]"
 	pip install --use-wheel "file://`pwd`#egg=recipi[redis]"
-	pip install --use-wheel --upgrade -r requirements/base.txt
+	pip install --use-wheel --upgrade -r requirements.txt
 	@echo ""
 
 
@@ -45,7 +45,7 @@ develop: deps
 
 docs: clean-build
 	pip install --use-wheel "file://`pwd`#egg=recipi[docs]"
-	sphinx-apidoc --force -o docs/source/modules/ src/recipi src/recipi/migrations src/recipi/tests src/recipi/settings.py
+	sphinx-apidoc --force -o docs/source/modules/ src/recipi src/recipi/migrations src/recipi/tests src/recipi/settings.py rc/recipi/conf/travis.py
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 
