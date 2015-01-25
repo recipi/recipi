@@ -79,12 +79,17 @@ redis_requires = [
     'redis>=2.8.0',
 ]
 
+docs_requires = [
+    'sphinx>=1.2.3',
+    'sphinx_rtd_theme'
+]
+
 setup(
     name='recipi',
     version='0.1.0',
     description='recipe search',
     long_description=read('README.rst'),
-    author='Christopher Grebs',
+    author='Benjamin Banduhn, Christopher Grebs',
     author_email='cg@webshox.org',
     url='https://github.com/EnTeQuAk/recipi/',
     package_dir={'': 'src'},
@@ -94,6 +99,7 @@ setup(
     tests_require=test_requires,
     install_requires=install_requires,
     extras_require={
+        'docs': docs_requires,
         'tests': test_requires,
         'dev': dev_requires,
         'postgresql': postgresql_requires,
