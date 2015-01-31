@@ -99,7 +99,7 @@ class FoodDescription(models.Model):
     refuse_description = models.TextField(blank=True)
 
     # Percentage of refuse. (2-digit, no floating point.)
-    refuse = models.PositiveIntegerField(default=None, null=True, blank=True)
+    refuse_percentage = models.PositiveIntegerField(default=None, null=True, blank=True)
 
     # scientific name of the food item. Given for the
     # least processed for mof food (usually raw), if applicable.
