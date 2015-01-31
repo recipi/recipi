@@ -113,12 +113,35 @@ def process_language(data, verbose):
     return objects_created, objects_updated
 
 
+def process_language_descriptions(data, verbose):
+    objects_updated, objects_created = 0, 0
+
+    for row in get_reader(data, ('factor_code', 'description')):
+        if verbose: print('Importing row {0}'.format(row))
+
+        obj, created = LanguageDescription.objects.update_or_create(
+            factor_code=row['factor_code'],
+            description=row['description']
+        )
+
+        if created:
+            if verbose: print('Created {0}'.format(repr(obj)))
+            objects_created += 1
+        else:
+            if verbose: print('Updated {0}'.format(repr(obj)))
+            objects_updated += 1
+
+    return objects_created, objects_updated
+
+
+
 def import_usda(basepath, verbose=False):
     # NOTE: processors are sorted!
     processors = (
         ('FD_GROUP.txt', process_food_groups, 'food groups'),
         ('FOOD_DES.txt', process_food_description, 'food descriptions'),
         ('LANGUAL.txt', process_language, 'language factors'),
+        ('LANGDESC.txt', process_language_descriptions, 'language descriptions'),
     )
 
     for fname, handler, description in processors:
