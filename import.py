@@ -8,7 +8,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'recipi.settings')
 import django
 django.setup()
 
-from recipi.food.models import FoodGroup, FoodDescription
+from recipi.food.models import FoodGroup, Food, Language, LanguageDescription
 
 
 def _cl(string):
@@ -61,17 +61,17 @@ def process_food_description(data):
 
         survey = row.get('survey', None)
 
-        obj, created = FoodDescription.objects.update_or_create(
+        obj, created = Food.objects.update_or_create(
             ndb_number=row['ndb_no'],
             defaults={
                 'food_group': food_groups[row['fdgrp_cd']],
-                'long_description': row['long_desc'],
-                'short_description': row['short_desc'],
+                'name': row['long_desc'],
+                'short_name': row['short_desc'],
                 'common_names': _cl(row.get('com_name', '')),
                 'manufacturer_name': row.get('manufac_name', ''),
                 'survey': survey == 'Y' if survey is not None else None,
                 'refuse_description': row.get('ref_desc', ''),
-                'refuse': int(row.get('refuse', 0) or 0),
+                'refuse_percentage': int(row.get('refuse', 0) or 0),
                 'scientific_name': row.get('scientific_name', ''),
                 'nitrogen_factor': float(row.get('n_factor', 0.0) or 0.0),
                 'protein_factor': float(row.get('pro_factor', 0.0) or 0.0),
@@ -91,15 +91,46 @@ def process_food_description(data):
     print('Updated {0:d} food descriptions'.format(objects_updated))
 
 
-def import_usda(basepath):
-    processors = {
-        'FD_GROUP.txt': process_food_groups,
-        'FOOD_DES.txt': process_food_description,
-    }
+def process_language(data):
+    objects_updated, objects_created = 0, 0
 
-    for fname, handler in processors.items():
-        with codecs.open(os.path.join(basepath, fname), encoding='cp1252') as fobj:
-            handler(fobj)
+    foods = {obj.ndb_number: obj for obj in Food.objects.all()}
+
+    for row in get_reader(data, ('ndb_no', 'factor_code')):
+        print('Importing row {0}'.format(row))
+
+        food = foods[row['ndb_no']]
+
+        obj, created = Language.objects.update_or_create(
+            food=food,
+            factor_code=row['factor_code']
+        )
+
+        if created:
+            print('Created {0}'.format(repr(obj)))
+            objects_created += 1
+        else:
+            print('Updated {0}'.format(repr(obj)))
+            objects_updated += 1
+
+    print('Created {0:d} new food descriptions'.format(objects_created))
+    print('Updated {0:d} food descriptions'.format(objects_updated))
+
+
+def import_usda(basepath):
+    # NOTE: processors are sorted!
+    processors = (
+    #     ('FD_GROUP.txt', process_food_groups),
+    #     ('FOOD_DES.txt', process_food_description),
+        ('LANGUAL.txt', process_language),
+    )
+
+    for fname, handler in processors:
+        if fname is None:
+            handler(basepath)
+        else:
+            with codecs.open(os.path.join(basepath, fname), encoding='cp1252') as fobj:
+                handler(fobj)
 
 
 def import_recipes(fname):

@@ -54,7 +54,7 @@ class FoodGroup(models.Model):
     __repr__ = sane_repr('code', 'name')
 
 
-class FoodDescription(models.Model):
+class Food(models.Model):
     """Descriptions and group designators for all food items.
 
     Also contains common names, manufacturer name, scientific name,
@@ -77,11 +77,15 @@ class FoodDescription(models.Model):
     # NOTE: In database import identified by the 4-digit code in `FoodGroup.code`
     food_group = models.ForeignKey(FoodGroup)
 
-    # Description of this food item
-    long_description = models.TextField()
+    # Nmae of this food item
+    name = models.TextField()
 
-    # abbreviated description of this food item.
-    short_description = models.TextField()
+    # abbreviated name of this food item.
+    short_name = models.TextField()
+
+    # scientific name of the food item. Given for the
+    # least processed for mof food (usually raw), if applicable.
+    scientific_name = models.TextField(blank=True)
 
     # Other names commonly used to describe this item.
     # For example "soda" or "pop" for "carbonated beverages".
@@ -100,10 +104,6 @@ class FoodDescription(models.Model):
 
     # Percentage of refuse. (2-digit, no floating point.)
     refuse_percentage = models.PositiveIntegerField(default=None, null=True, blank=True)
-
-    # scientific name of the food item. Given for the
-    # least processed for mof food (usually raw), if applicable.
-    scientific_name = models.TextField(blank=True)
 
     # TODO: Write down summary of those paragraphs:
 
@@ -151,15 +151,38 @@ class FoodDescription(models.Model):
     # Factor for calculating calories from carbohydrate
     carbohydrate_factor = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
 
-    __repr__ = sane_repr('ndb_number', 'food_group', 'long_description')
+    __repr__ = sane_repr('ndb_number', 'food_group', 'name')
 
 
-# TODO: Move to jsonb field in `FoodDescription`?
+class Language(models.Model):
+    id = UUIDField(auto=True, primary_key=True)
+
+    food = models.ForeignKey(Food)
+
+    # The LanguaL factor from the Thesaurus
+    factor_code = models.CharField(max_length=5)
+
+    __repr__ = sane_repr('food', 'factor_code')
+
+    class Meta:
+        unique_together = ('food', 'factor_code')
+
+
+class LanguageDescription(models.Model):
+    id = UUIDField(auto=True, primary_key=True)
+
+    factor_code = models.CharField(max_length=5)
+    description = models.TextField()
+
+    __repr__ = sane_repr('factor_code', 'description')
+
+
 class Weight(models.Model):
     """Contains the weight in grams of a number of common measures for each food item."""
     id = UUIDField(auto=True, primary_key=True)
 
-    food = models.ForeignKey(FoodDescription)
+    food = models.ForeignKey(Food)
+    sequence = models.PositiveIntegerField()
 
     # Unit modifier (for example 1 in "1 cup")
     amount = models.DecimalField(max_digits=5, decimal_places=2)
@@ -175,6 +198,8 @@ class Weight(models.Model):
 
     # Standard deviation
     deviation = models.DecimalField(max_digits=7, decimal_places=3, default=0.0)
+
+    __repr__ = sane_repr('food', 'description', 'amount', 'weight')
 
 
 class Foonote(models.Model):
@@ -195,7 +220,7 @@ class Foonote(models.Model):
 
     # Sequence number. If a given footnote applies
     # to more than one nutrient number, the same `number` is used.
-    number = models.PositiveIntegerField()
+    sequence = models.PositiveIntegerField()
 
     # Type of footnote:
     # If `TYPE_NUTRIENT`, then `nutrient_number` is also set as it applies
@@ -209,6 +234,9 @@ class Foonote(models.Model):
     nutrient_number = models.PositiveIntegerField(default=0)
 
     text = models.TextField()
+
+    __repr__ = sane_repr('type', 'nutrient')
+
 
 # are provided, which are the first two common measures in the Weight file for each NDB
 # number. To obtain values per one of the common measures, multiply the value in the
@@ -224,3 +252,22 @@ class Foonote(models.Model):
 # For NDB No. 01001, 1 tablespoon = 14.2 g
 # So using this formula for the above example:
 # VH = (81.11*14.2)/100 = 11.52 g fat in 1 tablespoon of butter
+
+
+# type Nutrient struct {
+#     FoodID           int32   `json:"-"`
+#     NutrientID       int32   `json:"nutrient_id"`
+#     NutritionValue   float32 `json:"nutrient_value"`
+#     Min              float32 `json:"min"`
+#     Max              float32 `json:"max"`
+#     DegreesOfFreedom int32   `json:"-"`
+#     LowerErrorBound  float32 `json:"-"`
+#     UpperErrorBound  float32 `json:"-"`
+#     NutrientDefinition
+# }
+
+    # NutrientID    int32  `json:"id"`
+    # Units         string `json:"unit"`
+    # Tagname       string `json:"tagname"`
+    # Description   string `json:"description"`
+    # DecimalPlaces int32  `json:"decimal_places"`

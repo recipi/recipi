@@ -38,6 +38,22 @@ class Ingredient(models.Model):
     iron = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
 
 
+
+# type Ingredient struct {
+#     ID                  int32      `json:"-"`
+#     RecipeID            int32      `json:"-"`
+#     FoodID              int32      `json:"food_id"`
+#     Unit                string     `json:"unit"`
+#     Volume              float32    `json:"volume"`
+#     Name                string     `json:"name"`
+#     NitrogenFactor      float32    `json:"nitrogen_factor"`
+#     ProteinFactor       float32    `json:"protein_factor"`
+#     FatFactor           float32    `json:"fat_factor"`
+#     CarbonhydrateFactor float32    `json:"carbonhydrate_factor"`
+#     Nutrients           []Nutrient `json:"nutrients"`
+# }
+
+
 class RecipeIngredient(models.Model):
     # TODO: Figure out if this makes sense.
     # Currently this model would be used for simple ingredients such as
