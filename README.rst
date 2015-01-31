@@ -93,6 +93,10 @@ Import nutrition data and recipes
 
     $ python import.py
 
+.. note::
+
+    This will take some time...
+
 
 Run the server, celery and other services
 -----------------------------------------
