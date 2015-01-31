@@ -20,11 +20,11 @@ def get_reader(data, fieldnames):
         data, fieldnames=fieldnames, delimiter='^', quotechar='~')
 
 
-def process_food_groups(data):
+def process_food_groups(data, verbose):
     objects_updated, objects_created = 0, 0
 
     for row in get_reader(data, ('fdgr_cd', 'fdgr_desc')):
-        print('Importing row {0}'.format(row))
+        if verbose: print('Importing row {0}'.format(row))
 
         obj, created = FoodGroup.objects.update_or_create(
             code=row['fdgr_cd'],
@@ -34,18 +34,16 @@ def process_food_groups(data):
         )
 
         if created:
-            print('Created {0}'.format(repr(obj)))
+            if verbose: print('Created {0}'.format(repr(obj)))
             objects_created += 1
         else:
-            print('Updated {0}'.format(repr(obj)))
+            if verbose: print('Updated {0}'.format(repr(obj)))
             objects_updated += 1
 
-
-    print('Created {0:d} new food groups'.format(objects_created))
-    print('Updated {0:d} food groups'.format(objects_updated))
+    return objects_created, objects_updated
 
 
-def process_food_description(data):
+def process_food_description(data, verbose):
     objects_updated, objects_created = 0, 0
 
     fieldnames = (
@@ -57,7 +55,7 @@ def process_food_description(data):
     food_groups = {group.code: group for group in FoodGroup.objects.all()}
 
     for row in get_reader(data, fieldnames):
-        print('Importing row {0}'.format(row))
+        if verbose: print('Importing row {0}'.format(row))
 
         survey = row.get('survey', None)
 
@@ -81,23 +79,22 @@ def process_food_description(data):
         )
 
         if created:
-            print('Created {0}'.format(repr(obj)))
+            if verbose: print('Created {0}'.format(repr(obj)))
             objects_created += 1
         else:
-            print('Updated {0}'.format(repr(obj)))
+            if verbose: print('Updated {0}'.format(repr(obj)))
             objects_updated += 1
 
-    print('Created {0:d} new food descriptions'.format(objects_created))
-    print('Updated {0:d} food descriptions'.format(objects_updated))
+    return objects_created, objects_updated
 
 
-def process_language(data):
+def process_language(data, verbose):
     objects_updated, objects_created = 0, 0
 
     foods = {obj.ndb_number: obj for obj in Food.objects.all()}
 
     for row in get_reader(data, ('ndb_no', 'factor_code')):
-        print('Importing row {0}'.format(row))
+        if verbose: print('Importing row {0}'.format(row))
 
         food = foods[row['ndb_no']]
 
@@ -107,30 +104,33 @@ def process_language(data):
         )
 
         if created:
-            print('Created {0}'.format(repr(obj)))
+            if verbose: print('Created {0}'.format(repr(obj)))
             objects_created += 1
         else:
-            print('Updated {0}'.format(repr(obj)))
+            if verbose: print('Updated {0}'.format(repr(obj)))
             objects_updated += 1
 
-    print('Created {0:d} new food descriptions'.format(objects_created))
-    print('Updated {0:d} food descriptions'.format(objects_updated))
+    return objects_created, objects_updated
 
 
-def import_usda(basepath):
+def import_usda(basepath, verbose=False):
     # NOTE: processors are sorted!
     processors = (
-    #     ('FD_GROUP.txt', process_food_groups),
-    #     ('FOOD_DES.txt', process_food_description),
-        ('LANGUAL.txt', process_language),
+        ('FD_GROUP.txt', process_food_groups, 'food groups'),
+        ('FOOD_DES.txt', process_food_description, 'food descriptions'),
+        ('LANGUAL.txt', process_language, 'language factors'),
     )
 
-    for fname, handler in processors:
+    for fname, handler, description in processors:
         if fname is None:
             handler(basepath)
         else:
             with codecs.open(os.path.join(basepath, fname), encoding='cp1252') as fobj:
-                handler(fobj)
+                print('processing {0}'.format(description))
+                created, updated = handler(fobj, verbose=verbose)
+                print('Created {0:d} new {1}'.format(created, description))
+                print('Updated {0:d} {1}'.format(updated, description))
+
 
 
 def import_recipes(fname):
