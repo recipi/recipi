@@ -121,7 +121,7 @@ def process_language_descriptions(data, verbose):
 
         obj, created = LanguageDescription.objects.update_or_create(
             factor_code=row['factor_code'],
-            description=row['description']
+            description=row['description'],
         )
 
         if created:

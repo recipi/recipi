@@ -171,7 +171,7 @@ class Language(models.Model):
 class LanguageDescription(models.Model):
     id = UUIDField(auto=True, primary_key=True)
 
-    factor_code = models.CharField(max_length=5)
+    factor_code = models.CharField(max_length=5, unique=True)
     description = models.TextField()
 
     __repr__ = sane_repr('factor_code', 'description')
