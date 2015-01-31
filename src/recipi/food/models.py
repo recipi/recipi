@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from djorm_pgarray.fields import TextArrayField
@@ -177,6 +178,49 @@ class LanguageDescription(models.Model):
     __repr__ = sane_repr('factor_code', 'description')
 
 
+class Nutrient(models.Model):
+    id = UUIDField(auto=True, primary_key=True)
+
+    food = models.ForeignKey(Food)
+
+    nutrient_id = models.CharField(max_length=3)
+
+    # Amount in 100 grams, edible portion †.
+    nutrient_value = models.DecimalField(max_digits=10, decimal_places=3)
+
+    min = models.DecimalField(max_digits=10, decimal_places=3)
+    max = models.DecimalField(max_digits=10, decimal_places=3)
+    degrees_of_freedon = models.PositiveIntegerField()
+    lower_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
+    upper_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
+
+    class Meta:
+        unique_together = ('food', 'nutrient_id')
+
+
+class NutrientDefinition(models.Model):
+    id = UUIDField(auto=True, primary_key=True)
+
+    nutrient_id = models.CharField(max_length=3, unique=True)
+
+    # Units of measure (mg, g, μg, etc)
+    units = models.CharField(max_length=7)
+
+    # INFOODS Tagnames.† A unique abbreviation for a
+    # nutrient/food component developed by INFOODS to
+    # aid in the interchange of data.
+    tagname = models.CharField(max_length=20, blank=True)
+
+    # Name of nutrient/food component.
+    description = models.CharField(max_length=60, blank=True)
+
+    # Number of decimal places to which a nutrient value is rounded.
+    decimal_places = models.PositiveIntegerField()
+
+    # Used for correct ordering
+    ordering = models.PositiveIntegerField()
+
+
 class Weight(models.Model):
     """Contains the weight in grams of a number of common measures for each food item."""
     id = UUIDField(auto=True, primary_key=True)
@@ -192,9 +236,6 @@ class Weight(models.Model):
 
     # Weight in gram
     weight = models.DecimalField(max_digits=7, decimal_places=2)
-
-    # Number of data points.
-    data_points = models.PositiveIntegerField(default=0)
 
     # Standard deviation
     deviation = models.DecimalField(max_digits=7, decimal_places=3, default=0.0)
@@ -252,22 +293,3 @@ class Foonote(models.Model):
 # For NDB No. 01001, 1 tablespoon = 14.2 g
 # So using this formula for the above example:
 # VH = (81.11*14.2)/100 = 11.52 g fat in 1 tablespoon of butter
-
-
-# type Nutrient struct {
-#     FoodID           int32   `json:"-"`
-#     NutrientID       int32   `json:"nutrient_id"`
-#     NutritionValue   float32 `json:"nutrient_value"`
-#     Min              float32 `json:"min"`
-#     Max              float32 `json:"max"`
-#     DegreesOfFreedom int32   `json:"-"`
-#     LowerErrorBound  float32 `json:"-"`
-#     UpperErrorBound  float32 `json:"-"`
-#     NutrientDefinition
-# }
-
-    # NutrientID    int32  `json:"id"`
-    # Units         string `json:"unit"`
-    # Tagname       string `json:"tagname"`
-    # Description   string `json:"description"`
-    # DecimalPlaces int32  `json:"decimal_places"`

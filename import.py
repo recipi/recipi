@@ -8,7 +8,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'recipi.settings')
 import django
 django.setup()
 
-from recipi.food.models import FoodGroup, Food, Language, LanguageDescription
+from recipi.food.models import (
+    FoodGroup, Food, Language, LanguageDescription, Nutrient, NutrientDefinition
+)
 
 
 def _cl(string):
@@ -134,6 +136,73 @@ def process_language_descriptions(data, verbose):
     return objects_created, objects_updated
 
 
+def process_nutrient(data, verbose):
+    objects_updated, objects_created = 0, 0
+    foods = {obj.ndb_number: obj for obj in Food.objects.all()}
+
+    fields = (
+        'ndb_no', 'nutr_no', 'nutr_val', 'num_data_pts',
+        'std_error', 'src_cd', 'deriv_cd', 'ref_ndb_no',
+        'add_nutr_mark', 'num_studies', 'min', 'max', 'df',
+        'low_eb', 'up_eb', 'stat_cmt', 'addmod_date', 'cc'
+    )
+
+    for row in get_reader(data, fields):
+        if verbose: print('Importing row {0}'.format(row))
+
+        food = foods[row['ndb_no']]
+
+        obj, created = Nutrient.objects.update_or_create(
+            food=food,
+            nutrient_id=row['nutr_no'],
+            defaults={
+                'nutrient_value': float(row.get('nutr_val', 0.0) or 0.0),
+                'min': float(row.get('min', 0.0) or 0.0),
+                'max': float(row.get('max', 0.0) or 0.0),
+                'degrees_of_freedon': int(row.get('df', 0) or 0),
+                'lower_error_bound': float(row.get('low_eb', 0.0) or 0.0),
+                'upper_error_bound': float(row.get('up_eb', 0.0) or 0.0),
+            }
+        )
+
+        if created:
+            if verbose: print('Created {0}'.format(repr(obj)))
+            objects_created += 1
+        else:
+            if verbose: print('Updated {0}'.format(repr(obj)))
+            objects_updated += 1
+
+    return objects_created, objects_updated
+
+
+def process_nutrient_definition(data, verbose):
+    objects_updated, objects_created = 0, 0
+
+    fields = ('nutr_no', 'units', 'tagname', 'nutr_desc', 'num_desc', 'sr_order')
+
+    for row in get_reader(data, fields):
+        if verbose: print('Importing row {0}'.format(row))
+
+        obj, created = NutrientDefinition.objects.update_or_create(
+            nutrient_id=row['nutr_no'],
+            defaults={
+                'units': row['units'],
+                'tagname': row['tagname'],
+                'descriptions': row['nutr_desc'],
+                'decimal_places': row['num_desc'],
+                'ordering': row['sr_order']
+            },
+        )
+
+        if created:
+            if verbose: print('Created {0}'.format(repr(obj)))
+            objects_created += 1
+        else:
+            if verbose: print('Updated {0}'.format(repr(obj)))
+            objects_updated += 1
+
+    return objects_created, objects_updated
+
 
 def import_usda(basepath, verbose=False):
     # NOTE: processors are sorted!
@@ -142,6 +211,8 @@ def import_usda(basepath, verbose=False):
         ('FOOD_DES.txt', process_food_description, 'food descriptions'),
         ('LANGUAL.txt', process_language, 'language factors'),
         ('LANGDESC.txt', process_language_descriptions, 'language descriptions'),
+        ('NUT_DATA.txt', process_nutrient, 'nutrient data'),
+        ('NUTR_DEF.txt', process_nutrient_definition, 'nutrient definitions'),
     )
 
     for fname, handler, description in processors:
