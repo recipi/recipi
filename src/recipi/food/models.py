@@ -210,7 +210,7 @@ class Nutrient(models.Model):
     lower_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
     upper_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
 
-    __repr__ = sane_repr('nutrient_id', 'nutrient_value')
+    __repr__ = sane_repr('description', 'nutrient_value', 'unit')
     __str__ = sane_str('food', 'description', 'nutrient_value', 'unit')
 
     class Meta:
