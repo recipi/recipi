@@ -192,31 +192,8 @@ class Nutrient(models.Model):
     # Amount in 100 grams, edible portion †.
     nutrient_value = models.DecimalField(max_digits=10, decimal_places=3)
 
-    min = models.DecimalField(max_digits=10, decimal_places=3)
-    max = models.DecimalField(max_digits=10, decimal_places=3)
-    degrees_of_freedon = models.PositiveIntegerField()
-    lower_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
-    upper_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
-
-    __repr__ = sane_repr('nutrient_id', 'nutrient_value')
-    __str__ = sane_str('nutrient_id', 'nutrient_value')
-
-    class Meta:
-        unique_together = ('food', 'nutrient_id')
-
-
-class NutrientDefinition(models.Model):
-    id = UUIDField(auto=True, primary_key=True)
-
-    nutrient = models.ForeignKey(Nutrient)
-
     # Units of measure (mg, g, μg, etc)
-    units = models.CharField(max_length=7)
-
-    # INFOODS Tagnames.† A unique abbreviation for a
-    # nutrient/food component developed by INFOODS to
-    # aid in the interchange of data.
-    tagname = models.CharField(max_length=20, blank=True)
+    unit = models.CharField(max_length=7)
 
     # Name of nutrient/food component.
     description = models.CharField(max_length=60, blank=True)
@@ -227,8 +204,17 @@ class NutrientDefinition(models.Model):
     # Used for correct ordering
     ordering = models.PositiveIntegerField()
 
-    __repr__ = sane_repr('nutrient_id', 'description', 'units')
-    __str__ = sane_str('nutrient_id', 'description', 'units')
+    min = models.DecimalField(max_digits=10, decimal_places=3)
+    max = models.DecimalField(max_digits=10, decimal_places=3)
+    degrees_of_freedon = models.PositiveIntegerField()
+    lower_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
+    upper_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
+
+    __repr__ = sane_repr('nutrient_id', 'nutrient_value')
+    __str__ = sane_str('food', 'description', 'nutrient_value', 'unit')
+
+    class Meta:
+        unique_together = ('food', 'nutrient_id')
 
 
 class Weight(models.Model):

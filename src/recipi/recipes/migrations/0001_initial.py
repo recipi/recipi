@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 from django.db import models, migrations
 import djorm_pgarray.fields
 import timedelta.fields
-import recipi.utils.db.uuid
 from django.conf import settings
+import recipi.utils.db.uuid
 
 
 class Migration(migrations.Migration):
@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Cuisine',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
             ],
             options={
             },
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Ingredient',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=256)),
                 ('calories', models.DecimalField(max_digits=6, default=0.0, decimal_places=2)),
                 ('carbohydrate', models.DecimalField(max_digits=6, default=0.0, decimal_places=2)),
@@ -49,8 +49,8 @@ class Migration(migrations.Migration):
                 ('vitamin_d', models.DecimalField(max_digits=6, default=0.0, decimal_places=2)),
                 ('calcium', models.DecimalField(max_digits=6, default=0.0, decimal_places=2)),
                 ('iron', models.DecimalField(max_digits=6, default=0.0, decimal_places=2)),
-                ('food', models.ForeignKey(blank=True, null=True, to='food.Food')),
-                ('nutrients', models.ManyToManyField(to='food.Nutrient', null=True, blank=True)),
+                ('food', models.ForeignKey(to='food.Food', null=True, blank=True)),
+                ('nutrients', models.ManyToManyField(to='food.Nutrient', blank=True, null=True)),
             ],
             options={
             },
@@ -59,17 +59,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Recipe',
             fields=[
-                ('id', recipi.utils.db.uuid.UUIDField(serialize=False, max_length=32, blank=True, primary_key=True, editable=False, unique=True)),
+                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, serialize=False, unique=True, blank=True, primary_key=True, editable=False)),
                 ('url', models.URLField(max_length=2048, blank=True)),
                 ('title', models.CharField(max_length=80)),
                 ('description', models.TextField(blank=True)),
                 ('serving_description', models.TextField(blank=True)),
                 ('steps', djorm_pgarray.fields.TextArrayField(dbtype='text')),
                 ('servings', models.PositiveIntegerField()),
-                ('preparation_time', timedelta.fields.TimedeltaField(max_value=None, min_value=None)),
-                ('cook_time', timedelta.fields.TimedeltaField(max_value=None, min_value=None)),
+                ('preparation_time', timedelta.fields.TimedeltaField(min_value=None, max_value=None)),
+                ('cook_time', timedelta.fields.TimedeltaField(min_value=None, max_value=None)),
                 ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
-                ('cuisines', models.ManyToManyField(to='recipes.Cuisine', related_name='recipes', blank=True)),
+                ('cuisines', models.ManyToManyField(blank=True, related_name='recipes', to='recipes.Cuisine')),
             ],
             options={
             },
@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RecipeIngredient',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('metric_unit', models.CharField(max_length=3)),
                 ('volume', models.PositiveIntegerField()),
                 ('ingredient', models.ForeignKey(to='recipes.Ingredient')),
@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='recipe',
             name='ingredients',
-            field=models.ManyToManyField(to='recipes.Ingredient', through='recipes.RecipeIngredient', related_name='recipes', blank=True),
+            field=models.ManyToManyField(through='recipes.RecipeIngredient', blank=True, related_name='recipes', to='recipes.Ingredient'),
             preserve_default=True,
         ),
     ]

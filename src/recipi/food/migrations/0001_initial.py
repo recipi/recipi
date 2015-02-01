@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Food',
             fields=[
-                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, editable=False, primary_key=True, unique=True, serialize=False, blank=True)),
+                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, serialize=False, unique=True, blank=True, primary_key=True, editable=False)),
                 ('ndb_number', models.CharField(max_length=5)),
                 ('name', models.TextField()),
                 ('short_name', models.TextField()),
@@ -24,11 +24,11 @@ class Migration(migrations.Migration):
                 ('manufacturer_name', models.TextField(blank=True)),
                 ('survey', models.NullBooleanField(default=None)),
                 ('refuse_description', models.TextField(blank=True)),
-                ('refuse_percentage', models.PositiveIntegerField(null=True, default=None, blank=True)),
-                ('nitrogen_factor', models.DecimalField(decimal_places=2, default=0.0, max_digits=4)),
-                ('protein_factor', models.DecimalField(decimal_places=2, default=0.0, max_digits=4)),
-                ('fat_factor', models.DecimalField(decimal_places=2, default=0.0, max_digits=4)),
-                ('carbohydrate_factor', models.DecimalField(decimal_places=2, default=0.0, max_digits=4)),
+                ('refuse_percentage', models.PositiveIntegerField(blank=True, default=None, null=True)),
+                ('nitrogen_factor', models.DecimalField(max_digits=4, default=0.0, decimal_places=2)),
+                ('protein_factor', models.DecimalField(max_digits=4, default=0.0, decimal_places=2)),
+                ('fat_factor', models.DecimalField(max_digits=4, default=0.0, decimal_places=2)),
+                ('carbohydrate_factor', models.DecimalField(max_digits=4, default=0.0, decimal_places=2)),
             ],
             options={
             },
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FoodGroup',
             fields=[
-                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, editable=False, primary_key=True, unique=True, serialize=False, blank=True)),
+                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, serialize=False, unique=True, blank=True, primary_key=True, editable=False)),
                 ('code', models.CharField(max_length=4)),
                 ('name', models.CharField(max_length=60)),
             ],
@@ -48,9 +48,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Footnote',
             fields=[
-                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, editable=False, primary_key=True, unique=True, serialize=False, blank=True)),
+                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, serialize=False, unique=True, blank=True, primary_key=True, editable=False)),
                 ('sequence', models.PositiveIntegerField()),
-                ('type', models.CharField(choices=[('D', 'Food '), ('M', 'Measure'), ('N', 'Nutrient')], max_length=1)),
+                ('type', models.CharField(max_length=1, choices=[('D', 'Food '), ('M', 'Measure'), ('N', 'Nutrient')])),
                 ('nutrient_id', models.CharField(max_length=3)),
                 ('text', models.TextField()),
                 ('food', models.ForeignKey(to='food.Food')),
@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Language',
             fields=[
-                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, editable=False, primary_key=True, unique=True, serialize=False, blank=True)),
+                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, serialize=False, unique=True, blank=True, primary_key=True, editable=False)),
                 ('factor_code', models.CharField(max_length=5)),
                 ('food', models.ForeignKey(to='food.Food')),
             ],
@@ -73,8 +73,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LanguageDescription',
             fields=[
-                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, editable=False, primary_key=True, unique=True, serialize=False, blank=True)),
-                ('factor_code', models.CharField(unique=True, max_length=5)),
+                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, serialize=False, unique=True, blank=True, primary_key=True, editable=False)),
+                ('factor_code', models.CharField(max_length=5, unique=True)),
                 ('description', models.TextField()),
             ],
             options={
@@ -84,30 +84,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Nutrient',
             fields=[
-                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, editable=False, primary_key=True, unique=True, serialize=False, blank=True)),
+                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, serialize=False, unique=True, blank=True, primary_key=True, editable=False)),
                 ('nutrient_id', models.CharField(max_length=3)),
-                ('nutrient_value', models.DecimalField(decimal_places=3, max_digits=10)),
-                ('min', models.DecimalField(decimal_places=3, max_digits=10)),
-                ('max', models.DecimalField(decimal_places=3, max_digits=10)),
-                ('degrees_of_freedon', models.PositiveIntegerField()),
-                ('lower_error_bound', models.DecimalField(decimal_places=3, max_digits=10)),
-                ('upper_error_bound', models.DecimalField(decimal_places=3, max_digits=10)),
-                ('food', models.ForeignKey(to='food.Food')),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name='NutrientDefinition',
-            fields=[
-                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, editable=False, primary_key=True, unique=True, serialize=False, blank=True)),
-                ('units', models.CharField(max_length=7)),
-                ('tagname', models.CharField(max_length=20, blank=True)),
+                ('nutrient_value', models.DecimalField(max_digits=10, decimal_places=3)),
+                ('unit', models.CharField(max_length=7)),
                 ('description', models.CharField(max_length=60, blank=True)),
                 ('decimal_places', models.PositiveIntegerField()),
                 ('ordering', models.PositiveIntegerField()),
-                ('nutrient', models.ForeignKey(to='food.Nutrient')),
+                ('min', models.DecimalField(max_digits=10, decimal_places=3)),
+                ('max', models.DecimalField(max_digits=10, decimal_places=3)),
+                ('degrees_of_freedon', models.PositiveIntegerField()),
+                ('lower_error_bound', models.DecimalField(max_digits=10, decimal_places=3)),
+                ('upper_error_bound', models.DecimalField(max_digits=10, decimal_places=3)),
+                ('food', models.ForeignKey(to='food.Food')),
             ],
             options={
             },
@@ -116,12 +105,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Weight',
             fields=[
-                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, editable=False, primary_key=True, unique=True, serialize=False, blank=True)),
+                ('id', recipi.utils.db.uuid.UUIDField(max_length=32, serialize=False, unique=True, blank=True, primary_key=True, editable=False)),
                 ('sequence', models.PositiveIntegerField()),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=5)),
+                ('amount', models.DecimalField(max_digits=5, decimal_places=2)),
                 ('description', models.TextField()),
-                ('weight', models.DecimalField(decimal_places=2, max_digits=7)),
-                ('deviation', models.DecimalField(decimal_places=3, default=0.0, max_digits=7)),
+                ('weight', models.DecimalField(max_digits=7, decimal_places=2)),
+                ('deviation', models.DecimalField(max_digits=7, default=0.0, decimal_places=3)),
                 ('food', models.ForeignKey(to='food.Food')),
             ],
             options={

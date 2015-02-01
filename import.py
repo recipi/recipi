@@ -9,8 +9,7 @@ import django
 django.setup()
 
 from recipi.food.models import (
-    FoodGroup, Food, Language, LanguageDescription, Nutrient, NutrientDefinition,
-    Weight, Footnote
+    FoodGroup, Food, Language, LanguageDescription, Nutrient, Weight, Footnote
 )
 
 
@@ -137,9 +136,28 @@ def process_language_descriptions(data, verbose):
     return objects_created, objects_updated
 
 
-def process_nutrient(data, verbose):
+def process_nutrient(basepath, verbose):
     objects_updated, objects_created = 0, 0
     foods = {obj.ndb_number: obj for obj in Food.objects.all()}
+
+    # Get all nutrient definitions, we're storing all that information
+    # in one table. This leads to some duplicate data
+    # but is waaaay easier to access.
+    definitions = {}
+
+    with codecs.open(os.path.join(basepath, 'NUTR_DEF.txt'), encoding='cp1252') as fobj:
+
+        fields = ('nutr_no', 'units', 'tagname', 'nutr_desc', 'num_desc', 'sr_order')
+
+        for row in get_reader(data, fields):
+            if verbose: print('Importing row {0}'.format(row))
+
+            definitions[row['nutr_no']] = {
+                'unit': row['units'],
+                'description': row['nutr_desc'],
+                'decimal_places': row['num_desc'],
+                'ordering': row['sr_order']
+            }
 
     fields = (
         'ndb_no', 'nutr_no', 'nutr_val', 'num_data_pts',
@@ -148,15 +166,14 @@ def process_nutrient(data, verbose):
         'low_eb', 'up_eb', 'stat_cmt', 'addmod_date', 'cc'
     )
 
-    for row in get_reader(data, fields):
-        if verbose: print('Importing row {0}'.format(row))
+    with codecs.open(os.path.join(basepath, 'NUTR_DATA.txt'), encoding='cp1252') as fobj:
+        for row in get_reader(fobj, fields):
+            if verbose: print('Importing row {0}'.format(row))
 
-        food = foods[row['ndb_no']]
+            food = foods[row['ndb_no']]
+            definition = definitions[row['nutrient_id']]
 
-        obj, created = Nutrient.objects.update_or_create(
-            food=food,
-            nutrient_id=row['nutr_no'],
-            defaults={
+            defaults = {
                 'nutrient_value': float(row.get('nutr_val', 0.0) or 0.0),
                 'min': float(row.get('min', 0.0) or 0.0),
                 'max': float(row.get('max', 0.0) or 0.0),
@@ -164,46 +181,21 @@ def process_nutrient(data, verbose):
                 'lower_error_bound': float(row.get('low_eb', 0.0) or 0.0),
                 'upper_error_bound': float(row.get('up_eb', 0.0) or 0.0),
             }
-        )
 
-        if created:
-            if verbose: print('Created {0}'.format(repr(obj)))
-            objects_created += 1
-        else:
-            if verbose: print('Updated {0}'.format(repr(obj)))
-            objects_updated += 1
+            defaults.update(definition)
 
-    return objects_created, objects_updated
+            obj, created = Nutrient.objects.update_or_create(
+                food=food,
+                nutrient_id=row['nutr_no'],
+                defaults=defaults
+            )
 
-
-def process_nutrient_definition(data, verbose):
-    objects_updated, objects_created = 0, 0
-    nutrients = {obj.nutrient_id: obj for obj in Nutrient.objects.all()}
-
-    fields = ('nutr_no', 'units', 'tagname', 'nutr_desc', 'num_desc', 'sr_order')
-
-    for row in get_reader(data, fields):
-        if verbose: print('Importing row {0}'.format(row))
-
-        nutrient = nutrients[row['nutr_no']]
-
-        obj, created = NutrientDefinition.objects.update_or_create(
-            nutrient=nutrient,
-            defaults={
-                'units': row['units'],
-                'tagname': row['tagname'],
-                'description': row['nutr_desc'],
-                'decimal_places': row['num_desc'],
-                'ordering': row['sr_order']
-            },
-        )
-
-        if created:
-            if verbose: print('Created {0}'.format(repr(obj)))
-            objects_created += 1
-        else:
-            if verbose: print('Updated {0}'.format(repr(obj)))
-            objects_updated += 1
+            if created:
+                if verbose: print('Created {0}'.format(repr(obj)))
+                objects_created += 1
+            else:
+                if verbose: print('Updated {0}'.format(repr(obj)))
+                objects_updated += 1
 
     return objects_created, objects_updated
 
@@ -281,8 +273,7 @@ def import_usda(basepath, verbose=True):
         ('FOOD_DES.txt', process_food_description, 'food descriptions'),
         ('LANGUAL.txt', process_language, 'language factors'),
         ('LANGDESC.txt', process_language_descriptions, 'language descriptions'),
-        ('NUT_DATA.txt', process_nutrient, 'nutrient data'),
-        ('NUTR_DEF.txt', process_nutrient_definition, 'nutrient definitions'),
+        (None, process_nutrient, 'nutrient data'),
         ('WEIGHT.txt', process_weight, 'weight definitions'),
         ('FOOTNOTE.txt', process_footnote, 'footnotes'),
     )
@@ -291,7 +282,7 @@ def import_usda(basepath, verbose=True):
 
     for fname, handler, description in processors:
         if fname is None:
-            handler(basepath)
+            handler(basepath, verbose)
         else:
             with codecs.open(os.path.join(basepath, fname), encoding='cp1252') as fobj:
                 print('processing {0}'.format(description))
