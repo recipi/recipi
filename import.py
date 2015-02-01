@@ -178,14 +178,17 @@ def process_nutrient(data, verbose):
 
 def process_nutrient_definition(data, verbose):
     objects_updated, objects_created = 0, 0
+    nutrients = {obj.nutrient_id: obj for obj in Nutrient.objects.all()}
 
     fields = ('nutr_no', 'units', 'tagname', 'nutr_desc', 'num_desc', 'sr_order')
 
     for row in get_reader(data, fields):
         if verbose: print('Importing row {0}'.format(row))
 
+        nutrient = nutrients[row['nutr_no']]
+
         obj, created = NutrientDefinition.objects.update_or_create(
-            nutrient_id=row['nutr_no'],
+            nutrient=nutrient,
             defaults={
                 'units': row['units'],
                 'tagname': row['tagname'],

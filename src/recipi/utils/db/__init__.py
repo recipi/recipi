@@ -12,6 +12,12 @@ def sane_repr(*attrs):
             '%s=%s' % (a, repr(getattr(self, a, None)))
             for a in attrs)
 
-        return u'<%s at 0x%x: %s>' % (cls, id(self), ', '.join(pairs))
+        return '<%s at 0x%x: %s>' % (cls, id(self), ', '.join(pairs))
 
     return _repr
+
+
+def sane_str(*attrs):
+    def _str(self):
+        return '; '.join(str(getattr(self, attr, '-')) for attr in attrs)
+    return _str

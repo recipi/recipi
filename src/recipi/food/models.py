@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from djorm_pgarray.fields import TextArrayField
 
-from recipi.utils.db import sane_repr
+from recipi.utils.db import sane_repr, sane_str
 from recipi.utils.db.uuid import UUIDField
 
 # TODO: Figure out what the fucking hell a LanguaL factor is
@@ -53,6 +53,7 @@ class FoodGroup(models.Model):
     name = models.CharField(max_length=60)
 
     __repr__ = sane_repr('code', 'name')
+    __str__ = sane_str('name')
 
 
 class Food(models.Model):
@@ -153,6 +154,7 @@ class Food(models.Model):
     carbohydrate_factor = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
 
     __repr__ = sane_repr('ndb_number', 'food_group', 'name')
+    __str__ = sane_str('name')
 
 
 class Language(models.Model):
@@ -164,6 +166,7 @@ class Language(models.Model):
     factor_code = models.CharField(max_length=5)
 
     __repr__ = sane_repr('food', 'factor_code')
+    __str__ = sane_str('factor_code', 'food')
 
     class Meta:
         unique_together = ('food', 'factor_code')
@@ -176,6 +179,7 @@ class LanguageDescription(models.Model):
     description = models.TextField()
 
     __repr__ = sane_repr('factor_code', 'description')
+    __str__ = sane_str('factor_code', 'description')
 
 
 class Nutrient(models.Model):
@@ -195,6 +199,7 @@ class Nutrient(models.Model):
     upper_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
 
     __repr__ = sane_repr('nutrient_id', 'nutrient_value')
+    __str__ = sane_str('nutrient_id', 'nutrient_value')
 
     class Meta:
         unique_together = ('food', 'nutrient_id')
@@ -203,7 +208,7 @@ class Nutrient(models.Model):
 class NutrientDefinition(models.Model):
     id = UUIDField(auto=True, primary_key=True)
 
-    nutrient_id = models.CharField(max_length=3, unique=True)
+    nutrient = models.ForeignKey(Nutrient)
 
     # Units of measure (mg, g, μg, etc)
     units = models.CharField(max_length=7)
@@ -223,6 +228,7 @@ class NutrientDefinition(models.Model):
     ordering = models.PositiveIntegerField()
 
     __repr__ = sane_repr('nutrient_id', 'description', 'units')
+    __str__ = sane_str('nutrient_id', 'description', 'units')
 
 
 class Weight(models.Model):
@@ -246,6 +252,7 @@ class Weight(models.Model):
     deviation = models.DecimalField(max_digits=7, decimal_places=3, default=0.0)
 
     __repr__ = sane_repr('food', 'description', 'amount', 'weight')
+    __str__ = sane_str('food', 'description', 'amount', 'weight')
 
     class Meta:
         unique_together = ('food', 'sequence')
@@ -287,6 +294,7 @@ class Footnote(models.Model):
     text = models.TextField()
 
     __repr__ = sane_repr('type', 'nutrient')
+    __str__ = sane_str('type', 'nutrient', 'text')
 
 
 # are provided, which are the first two common measures in the Weight file for each NDB
