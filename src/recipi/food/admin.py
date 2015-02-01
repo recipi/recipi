@@ -23,22 +23,25 @@ class FoodAdmin(admin.ModelAdmin):
 
 @admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ('food__name', 'factor_code')
+    list_filter = ('food__food_group__name',)
 
 
 @admin.register(LanguageDescription)
 class LanguageDescriptionAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ('factor_code', 'description')
 
 
 @admin.register(Nutrient)
 class NutrientAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ('food__name', 'nutrient_id', 'description')
+    list_filter = ('food__food_group__name', 'unit')
 
 
 @admin.register(Weight)
 class WeightAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ('food__name', 'description')
+    list_filter = ('food__food_group__name',)
 
 
 @admin.register(Footnote)
