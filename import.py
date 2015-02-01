@@ -274,13 +274,13 @@ def process_footnote(data, verbose):
 def import_usda(basepath, verbose=True):
     # NOTE: processors are sorted!
     processors = (
-        # ('FD_GROUP.txt', process_food_groups, 'food groups'),
-        # ('FOOD_DES.txt', process_food_description, 'food descriptions'),
-        # ('LANGUAL.txt', process_language, 'language factors'),
-        # ('LANGDESC.txt', process_language_descriptions, 'language descriptions'),
-        # ('NUT_DATA.txt', process_nutrient, 'nutrient data'),
-        # ('NUTR_DEF.txt', process_nutrient_definition, 'nutrient definitions'),
-        # ('WEIGHT.txt', process_weight, 'weight definitions'),
+        ('FD_GROUP.txt', process_food_groups, 'food groups'),
+        ('FOOD_DES.txt', process_food_description, 'food descriptions'),
+        ('LANGUAL.txt', process_language, 'language factors'),
+        ('LANGDESC.txt', process_language_descriptions, 'language descriptions'),
+        ('NUT_DATA.txt', process_nutrient, 'nutrient data'),
+        ('NUTR_DEF.txt', process_nutrient_definition, 'nutrient definitions'),
+        ('WEIGHT.txt', process_weight, 'weight definitions'),
         ('FOOTNOTE.txt', process_footnote, 'footnotes'),
     )
 
