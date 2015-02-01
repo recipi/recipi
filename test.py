@@ -1,9 +1,20 @@
+import os
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'recipi.settings')
+
+import django
+django.setup()
+
 import nltk
 from nltk.classify import MaxentClassifier
 from nltk.tag import pos_tag, map_tag
 from nltk.corpus import stopwords as corpus_stopwords
 from nltk.stem.snowball import EnglishStemmer
 from textblob import TextBlob
+from recipi.food.models import Food
+
+
+print('setup training data')
 
 # Set up our training material in a nice dictionary.
 training = {
@@ -53,6 +64,8 @@ def get_features(text):
     return features
 
 
+print('setup training set')
+
 # Set up a list that will contain all of our tagged examples,
 # which we will pass into the classifier at the end.
 training_set = []
@@ -67,6 +80,8 @@ def classify(s):
     print("%s\n >>> %s, %s\n" % (s, p.max(), p.prob(p.max())))
     return (p.max(), p.prob(p.max()))
 
+
+print('setup classifier')
 
 # Train up our classifier
 # TODO: get http://www.umiacs.umd.edu/~hal/megam/version0_91/ working
