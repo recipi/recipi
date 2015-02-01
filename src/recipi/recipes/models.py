@@ -7,6 +7,8 @@ from recipi.utils.db.uuid import UUIDField
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=256)
+    food = models.ForeignKey('food.Food', null=True, blank=True)
+    nutrients = models.ManyToManyField('food.Nutrient', null=True, blank=True)
 
     # TODO: There is tooooons more: http://ndb.nal.usda.gov/ndb/foods/show/3044
     # I tried to find the most important values for now (cg)
@@ -38,21 +40,6 @@ class Ingredient(models.Model):
     iron = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
 
 
-# type Ingredient struct {
-#     ID                  int32      `json:"-"`
-#     RecipeID            int32      `json:"-"`
-#     FoodID              int32      `json:"food_id"`
-#     Unit                string     `json:"unit"`
-#     Volume              float32    `json:"volume"`
-#     Name                string     `json:"name"`
-#     NitrogenFactor      float32    `json:"nitrogen_factor"`
-#     ProteinFactor       float32    `json:"protein_factor"`
-#     FatFactor           float32    `json:"fat_factor"`
-#     CarbonhydrateFactor float32    `json:"carbonhydrate_factor"`
-#     Nutrients           []Nutrient `json:"nutrients"`
-# }
-
-
 class RecipeIngredient(models.Model):
     # TODO: Figure out if this makes sense.
     # Currently this model would be used for simple ingredients such as
@@ -65,7 +52,7 @@ class RecipeIngredient(models.Model):
 
     # TODO: Normalize units in `recipes.constants`
     metric_unit = models.CharField(max_length=3, choices=())
-    number = models.PositiveIntegerField()
+    volume = models.PositiveIntegerField()
 
 
 class Cuisine(models.Model):
