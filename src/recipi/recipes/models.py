@@ -38,7 +38,6 @@ class Ingredient(models.Model):
     iron = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
 
 
-
 # type Ingredient struct {
 #     ID                  int32      `json:"-"`
 #     RecipeID            int32      `json:"-"`
