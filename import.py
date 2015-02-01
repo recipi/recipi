@@ -280,7 +280,7 @@ def import_usda(basepath, verbose=True):
         # ('LANGDESC.txt', process_language_descriptions, 'language descriptions'),
         # ('NUT_DATA.txt', process_nutrient, 'nutrient data'),
         # ('NUTR_DEF.txt', process_nutrient_definition, 'nutrient definitions'),
-        ('WEIGHT.txt', process_weight, 'weight definitions'),
+        # ('WEIGHT.txt', process_weight, 'weight definitions'),
         ('FOOTNOTE.txt', process_footnote, 'footnotes'),
     )
 

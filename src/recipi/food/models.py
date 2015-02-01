@@ -282,7 +282,7 @@ class Footnote(models.Model):
         (TYPE_NUTRIENT, _('Nutrient'))
     ))
 
-    nutrient_id = models.CharField(max_length=3, unique=True)
+    nutrient_id = models.CharField(max_length=3)
 
     text = models.TextField()
 
