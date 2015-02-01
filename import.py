@@ -149,7 +149,7 @@ def process_nutrient(basepath, verbose):
 
         fields = ('nutr_no', 'units', 'tagname', 'nutr_desc', 'num_desc', 'sr_order')
 
-        for row in get_reader(data, fields):
+        for row in get_reader(fobj, fields):
             if verbose: print('Importing row {0}'.format(row))
 
             definitions[row['nutr_no']] = {
@@ -166,12 +166,12 @@ def process_nutrient(basepath, verbose):
         'low_eb', 'up_eb', 'stat_cmt', 'addmod_date', 'cc'
     )
 
-    with codecs.open(os.path.join(basepath, 'NUTR_DATA.txt'), encoding='cp1252') as fobj:
+    with codecs.open(os.path.join(basepath, 'NUT_DATA.txt'), encoding='cp1252') as fobj:
         for row in get_reader(fobj, fields):
             if verbose: print('Importing row {0}'.format(row))
 
             food = foods[row['ndb_no']]
-            definition = definitions[row['nutrient_id']]
+            definition = definitions[row['nutr_no']]
 
             defaults = {
                 'nutrient_value': float(row.get('nutr_val', 0.0) or 0.0),
