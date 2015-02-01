@@ -14,7 +14,7 @@ from recipi.food.models import (
 
 
 def _cl(string):
-    return [x.strip() for x in string.split(',')]
+    return [x.strip() for x in string.split(',') if x.strip()]
 
 
 def get_reader(data, fieldnames):
