@@ -188,7 +188,7 @@ def process_nutrient_definition(data, verbose):
             defaults={
                 'units': row['units'],
                 'tagname': row['tagname'],
-                'descriptions': row['nutr_desc'],
+                'description': row['nutr_desc'],
                 'decimal_places': row['num_desc'],
                 'ordering': row['sr_order']
             },
