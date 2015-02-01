@@ -194,6 +194,8 @@ class Nutrient(models.Model):
     lower_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
     upper_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
 
+    __repr__ = sane_repr('nutrient_id', 'nutrient_value')
+
     class Meta:
         unique_together = ('food', 'nutrient_id')
 
@@ -219,6 +221,8 @@ class NutrientDefinition(models.Model):
 
     # Used for correct ordering
     ordering = models.PositiveIntegerField()
+
+    __repr__ = sane_repr('nutrient_id', 'description', 'units')
 
 
 class Weight(models.Model):
@@ -247,7 +251,7 @@ class Weight(models.Model):
         unique_together = ('food', 'sequence')
 
 
-class Foonote(models.Model):
+class Footnote(models.Model):
     """Contains additional information.
 
     About:
@@ -263,6 +267,8 @@ class Foonote(models.Model):
 
     id = UUIDField(auto=True, primary_key=True)
 
+    food = models.ForeignKey(Food)
+
     # Sequence number. If a given footnote applies
     # to more than one nutrient number, the same `number` is used.
     sequence = models.PositiveIntegerField()
@@ -276,7 +282,7 @@ class Foonote(models.Model):
         (TYPE_NUTRIENT, _('Nutrient'))
     ))
 
-    nutrient_number = models.PositiveIntegerField(default=0)
+    nutrient_id = models.CharField(max_length=3, unique=True)
 
     text = models.TextField()
 

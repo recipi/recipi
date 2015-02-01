@@ -9,7 +9,8 @@ import django
 django.setup()
 
 from recipi.food.models import (
-    FoodGroup, Food, Language, LanguageDescription, Nutrient, NutrientDefinition
+    FoodGroup, Food, Language, LanguageDescription, Nutrient, NutrientDefinition,
+    Weight, Footnote
 )
 
 
@@ -204,16 +205,86 @@ def process_nutrient_definition(data, verbose):
     return objects_created, objects_updated
 
 
-def import_usda(basepath, verbose=False):
+def process_weight(data, verbose):
+    objects_updated, objects_created = 0, 0
+    foods = {obj.ndb_number: obj for obj in Food.objects.all()}
+
+    fields = (
+        'ndb_no', 'seq', 'amount', 'msre_desc', 'gm_wgt', 'num_data_pts',
+        'std_dev'
+    )
+
+    for row in get_reader(data, fields):
+        if verbose: print('Importing row {0}'.format(row))
+
+        food = foods[row['ndb_no']]
+
+        obj, created = Weight.objects.update_or_create(
+            food=food,
+            sequence=int(row['seq']),
+            defaults={
+                'amount': float(row['amount']),
+                'description': row['msre_desc'],
+                'weight': float(row['gm_wgt']),
+                'deviation': float(row.get('std_dev', 0.0) or 0.0)
+            }
+        )
+
+        if created:
+            if verbose: print('Created {0}'.format(repr(obj)))
+            objects_created += 1
+        else:
+            if verbose: print('Updated {0}'.format(repr(obj)))
+            objects_updated += 1
+
+    return objects_created, objects_updated
+
+
+def process_footnote(data, verbose):
+    objects_updated, objects_created = 0, 0
+    foods = {obj.ndb_number: obj for obj in Food.objects.all()}
+
+    fields = ('ndb_no', 'footnt_no', 'footnt_typ', 'nutr_no', 'footnt_txt')
+
+    for row in get_reader(data, fields):
+        if verbose: print('Importing row {0}'.format(row))
+
+        food = foods[row['ndb_no']]
+
+        obj, created = Footnote.objects.update_or_create(
+            food=food,
+            sequence=int(row['footnt_no']),
+            type=row['footnt_typ'],
+            nutrient_id=row['nutr_no'],
+            defaults={
+                'text': row['footnt_txt'],
+            },
+        )
+
+        if created:
+            if verbose: print('Created {0}'.format(repr(obj)))
+            objects_created += 1
+        else:
+            if verbose: print('Updated {0}'.format(repr(obj)))
+            objects_updated += 1
+
+    return objects_created, objects_updated
+
+
+def import_usda(basepath, verbose=True):
     # NOTE: processors are sorted!
     processors = (
-        ('FD_GROUP.txt', process_food_groups, 'food groups'),
-        ('FOOD_DES.txt', process_food_description, 'food descriptions'),
-        ('LANGUAL.txt', process_language, 'language factors'),
-        ('LANGDESC.txt', process_language_descriptions, 'language descriptions'),
-        ('NUT_DATA.txt', process_nutrient, 'nutrient data'),
-        ('NUTR_DEF.txt', process_nutrient_definition, 'nutrient definitions'),
+        # ('FD_GROUP.txt', process_food_groups, 'food groups'),
+        # ('FOOD_DES.txt', process_food_description, 'food descriptions'),
+        # ('LANGUAL.txt', process_language, 'language factors'),
+        # ('LANGDESC.txt', process_language_descriptions, 'language descriptions'),
+        # ('NUT_DATA.txt', process_nutrient, 'nutrient data'),
+        # ('NUTR_DEF.txt', process_nutrient_definition, 'nutrient definitions'),
+        ('WEIGHT.txt', process_weight, 'weight definitions'),
+        ('FOOTNOTE.txt', process_footnote, 'footnotes'),
     )
+
+    summary = []
 
     for fname, handler, description in processors:
         if fname is None:
@@ -222,8 +293,10 @@ def import_usda(basepath, verbose=False):
             with codecs.open(os.path.join(basepath, fname), encoding='cp1252') as fobj:
                 print('processing {0}'.format(description))
                 created, updated = handler(fobj, verbose=verbose)
-                print('Created {0:d} new {1}'.format(created, description))
-                print('Updated {0:d} {1}'.format(updated, description))
+                summary.append(('Created {0:d} new {1}'.format(created, description)))
+                summary.append(('Updated {0:d} {1}'.format(updated, description)))
+
+    print('\n\n'.join(summary))
 
 
 
