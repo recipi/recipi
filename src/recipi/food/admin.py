@@ -6,38 +6,42 @@ from recipi.food.models import (
     Weight, Footnote)
 
 
+@admin.register(FoodGroup)
 class FoodGroupAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ('code', 'name')
 
 
+@admin.register(Food)
 class FoodAdmin(admin.ModelAdmin):
-    pass
+    search_fields = (
+        'ndb_number', 'food_group__name', 'name', 'short_name',
+        'common_names', 'manufacturer_name'
+    )
+
+    list_filter = ('food_group__name',)
 
 
+@admin.register(Language)
 class LanguageAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(LanguageDescription)
 class LanguageDescriptionAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(Nutrient)
 class NutrientAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(Weight)
 class WeightAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(Footnote)
 class FootnoteAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(FoodGroup, FoodGroupAdmin)
-admin.site.register(Food, FoodAdmin)
-admin.site.register(Language, LanguageAdmin)
-admin.site.register(LanguageDescription, LanguageDescriptionAdmin)
-admin.site.register(Nutrient, NutrientAdmin)
-admin.site.register(Weight, WeightAdmin)
-admin.site.register(Footnote, FootnoteAdmin)
+    search_fields = ('text', 'type', 'food__name')
+    list_filter = ('type', 'food__food_group__name')

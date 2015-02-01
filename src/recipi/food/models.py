@@ -280,7 +280,7 @@ class Footnote(models.Model):
     text = models.TextField()
 
     __repr__ = sane_repr('type', 'nutrient')
-    __str__ = sane_str('type', 'nutrient', 'text')
+    __str__ = sane_str('text')
 
 
 # are provided, which are the first two common measures in the Weight file for each NDB
