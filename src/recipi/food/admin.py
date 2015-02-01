@@ -6,10 +6,38 @@ from recipi.food.models import (
     Weight, Footnote)
 
 
-admin.site.register(FoodGroup)
-admin.site.register(Food)
-admin.site.register(Language)
-admin.site.register(LanguageDescription)
-admin.site.register(Nutrient)
-admin.site.register(Weight)
-admin.site.register(Footnote)
+class FoodGroupAdmin(admin.ModelAdmin):
+    pass
+
+
+class FoodAdmin(admin.ModelAdmin):
+    pass
+
+
+class LanguageAdmin(admin.ModelAdmin):
+    pass
+
+
+class LanguageDescriptionAdmin(admin.ModelAdmin):
+    pass
+
+
+class NutrientAdmin(admin.ModelAdmin):
+    pass
+
+
+class WeightAdmin(admin.ModelAdmin):
+    pass
+
+
+class FootnoteAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(FoodGroup, FoodGroupAdmin)
+admin.site.register(Food, FoodAdmin)
+admin.site.register(Language, LanguageAdmin)
+admin.site.register(LanguageDescription, LanguageDescriptionAdmin)
+admin.site.register(Nutrient, NutrientAdmin)
+admin.site.register(Weight, WeightAdmin)
+admin.site.register(Footnote, FootnoteAdmin)
