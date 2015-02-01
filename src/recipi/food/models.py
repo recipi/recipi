@@ -226,6 +226,7 @@ class Weight(models.Model):
     id = UUIDField(auto=True, primary_key=True)
 
     food = models.ForeignKey(Food)
+
     sequence = models.PositiveIntegerField()
 
     # Unit modifier (for example 1 in "1 cup")
@@ -241,6 +242,9 @@ class Weight(models.Model):
     deviation = models.DecimalField(max_digits=7, decimal_places=3, default=0.0)
 
     __repr__ = sane_repr('food', 'description', 'amount', 'weight')
+
+    class Meta:
+        unique_together = ('food', 'sequence')
 
 
 class Foonote(models.Model):
