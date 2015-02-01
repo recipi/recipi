@@ -282,13 +282,14 @@ def import_usda(basepath, verbose=True):
 
     for fname, handler, description in processors:
         if fname is None:
-            handler(basepath, verbose)
+            created, updated = handler(basepath, verbose)
         else:
             with codecs.open(os.path.join(basepath, fname), encoding='cp1252') as fobj:
                 print('processing {0}'.format(description))
                 created, updated = handler(fobj, verbose=verbose)
-                summary.append(('Created {0:d} new {1}'.format(created, description)))
-                summary.append(('Updated {0:d} {1}'.format(updated, description)))
+
+        summary.append(('Created {0:d} new {1}'.format(created, description)))
+        summary.append(('Updated {0:d} {1}'.format(updated, description)))
 
     print('\n\n'.join(summary))
 
