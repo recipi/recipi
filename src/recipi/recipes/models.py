@@ -14,30 +14,32 @@ class Ingredient(models.Model):
     # I tried to find the most important values for now (cg)
     # All fields allow values up to 9999.99 - I think this should suffice (cg)
 
-    calories = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    carbohydrate = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    protein = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    saturated_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    polyunsaturated_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    monounsaturated_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    trans_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    cholesterol = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    sodium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    potassium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    fiber = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    sugar = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # TODO: Those are calculatable from what we already have via our nutrition database
 
-    # TODO: depending on the source we need to make sure to use those values
-    # identically. E.g fatsecret.com gives these values only as a
-    # "percentage of daily Calcium/Iron" etc based on a 2000 calorie diet.
-    vitamin_a = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    vitamin_b = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    vitamin_c = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    vitamin_d = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # calories = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # carbohydrate = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # protein = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # saturated_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # polyunsaturated_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # monounsaturated_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # trans_fat = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # cholesterol = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # sodium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # potassium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # fiber = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # sugar = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
 
-    calcium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    iron = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # # TODO: depending on the source we need to make sure to use those values
+    # # identically. E.g fatsecret.com gives these values only as a
+    # # "percentage of daily Calcium/Iron" etc based on a 2000 calorie diet.
+    # vitamin_a = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # vitamin_b = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # vitamin_c = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # vitamin_d = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+
+    # calcium = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
+    # iron = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
 
 
 class RecipeIngredient(models.Model):
