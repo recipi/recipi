@@ -59,6 +59,10 @@ class Cuisine(models.Model):
     pass
 
 
+class Picture(models.Model):
+    pass
+
+
 class Recipe(models.Model):
     id = UUIDField(auto=True, primary_key=True)
     url = models.URLField(max_length=2048, blank=True)
@@ -70,7 +74,6 @@ class Recipe(models.Model):
     author = models.ForeignKey('accounts.User')
 
     description = models.TextField(blank=True)
-    serving_description = models.TextField(blank=True)
 
     ingredients = models.ManyToManyField(
         Ingredient,
@@ -85,7 +88,11 @@ class Recipe(models.Model):
         blank=True
     )
 
-    steps = TextArrayField()
+    pictures = models.ManyToManyField(
+        Picture,
+        related_name='recipes',
+        blank=True
+    )
 
     # We're always talking about a one serving per 'Person' here.
     servings = models.PositiveIntegerField()
