@@ -326,6 +326,3 @@ def import_recipes(fname):
 
 if __name__ == '__main__':
     import_usda('./resources/usda/')
-    # recipes = import_recipes('recipeitems-latest.json')
-    # print(len(recipes))
-    # print(recipes[1])
