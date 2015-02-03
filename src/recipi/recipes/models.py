@@ -1,7 +1,7 @@
 from django.db import models
-from djorm_pgarray.fields import TextArrayField
 from timedelta import fields as timedelta_fields
 
+from recipi.recipes.constants import UNIT_CHOICES
 from recipi.utils.db.uuid import UUIDField
 
 
@@ -15,7 +15,7 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey('Recipe')
     ingredient = models.ForeignKey(Ingredient)
 
-    metric_unit = models.CharField(max_length=3, choices=())
+    metric_unit = models.CharField(max_length=3, choices=UNIT_CHOICES)
     volume = models.PositiveIntegerField()
 
 
