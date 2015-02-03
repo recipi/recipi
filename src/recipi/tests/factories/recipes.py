@@ -18,12 +18,6 @@ class RecipeFactory(factory.DjangoModelFactory):
     description = 'Hell yeah!'
     ingredients = factory.SubFactory(IngredientFactory)
 
-    steps = [
-        'Eat chocolate chips. They don\'t belong to others.',
-        'Make dough. You know it\'s delicious.',
-        'Hell, just eat the dough too. It\'s useless without chocolate chips.'
-    ]
-
     servings = 1
     preparation_time = '2 hours'
     cook_time = '1 hour'

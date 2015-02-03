@@ -5,6 +5,7 @@ from recipi.accounts.models import User
 
 
 class UserFactory(factory.DjangoModelFactory):
+    name = 'Test user'
     email = factory.Sequence(lambda i: '{0}@none.none'.format(i))
     is_active = True
 

@@ -36,7 +36,7 @@ class TestUserModel:
         retry.assert_called_once_with(retry_countdown=60, exc=mock.ANY)
 
     def test_short_name(self):
-        assert self.user.get_short_name() == self.user.email
+        assert self.user.get_short_name() == self.user.name
 
     def test_check_password(self):
         user = User()
