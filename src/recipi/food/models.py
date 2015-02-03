@@ -6,49 +6,11 @@ from djorm_pgarray.fields import TextArrayField
 from recipi.utils.db import sane_repr, sane_str
 from recipi.utils.db.uuid import UUIDField
 
-# TODO: Figure out what the fucking hell a LanguaL factor is
-# and how to use it (Pages 31, 32, TAble 6, 7 in sr27_doc.pdf)
-
-# This is a *HIGHLY* experimental structure that mostly
-# follows the structure of the USDA database.
-# It's entirely possible to change over time once we actually
-# develop code that uses it.
-
-# The original database is not well designed so there are other ways
-# of structuring the data. Figure it out! (cg)
-
-# General information
-# TODO: Write summary and move somewhere else!
-# by the True Retention Method (%TR) (Murphy et al., 1975). This method, as shown
-# below, accounts for the loss or gain of moisture and the loss of nutrients due to heat or
-# other food preparation methods:
-# %TR = (Nc*Gc ) / (Nr*Gr) * 100
-
-# where:
-# TR = true retention
-# Nc = nutrient content per g of cooked food,
-# Gc = g of cooked food,
-# Nr = nutrient content per g of raw food, and
-# Gr = g of food before cooking.
-
-# `Weight` table per 100g of food
-#  The following formula is used to calculate the nutrient
-# content per household measure:
-# N = (V*W)/100
-#
-# where:
-# N = nutrient value per household measure,
-# V = nutrient value per 100 g (Nutr_Val in the Nutrient Data file), and
-# W = g weight of portion (Gm_Wgt in the Weight file).
-
 
 class FoodGroup(models.Model):
-    id = UUIDField(auto=True, primary_key=True)
-
     # 4-digit code identifying a food group. Only
     # the first 2 digits are currently assigned.
-    # TODO: decide if this can be a proper primary key.
-    code = models.CharField(max_length=4)
+    code = models.CharField(max_length=4, primary_key=True)
 
     name = models.CharField(max_length=60)
 
@@ -69,25 +31,36 @@ class Food(models.Model):
     Links to the Footnote file by the NDB_No field
     Links to the LanguaL Factor file by the NDB_No field
     """
-    id = UUIDField(auto=True, primary_key=True)
-
-    # 5-digit nutrient databank number that uniquely identifies
-    # a food item.
-    # TODO: decide if this can be a proper primary key.
-    ndb_number = models.CharField(max_length=5)
+    #
+    ndb_number = models.CharField(
+        _('NDB Number'),
+        max_length=5, primary_key=True,
+        help_text=_(
+            '5-digit nutrient databank number that uniquely identifies a food item.'
+        )
+    )
 
     # NOTE: In database import identified by the 4-digit code in `FoodGroup.code`
-    food_group = models.ForeignKey(FoodGroup)
+    food_group = models.ForeignKey(label=_('Food Group'), FoodGroup)
 
-    # Nmae of this food item
-    name = models.TextField()
+    name = models.TextField(
+        label=_('Name'),
+        help_text=_('of this food item')
+    )
 
-    # abbreviated name of this food item.
-    short_name = models.TextField()
+    short_name = models.TextField(
+        _('Short Name'),
+        help_text=_('abbreviated name of this food item.')
+    )
 
-    # scientific name of the food item. Given for the
-    # least processed for mof food (usually raw), if applicable.
-    scientific_name = models.TextField(blank=True)
+    scientific_name = models.TextField(
+        _('Scientific Name'),
+        blank=True,
+        help_text=_(
+            'scientific name of the food item. Given for the '
+            'least processed for most food (usually raw), if applicable.'
+        )
+    )
 
     # Other names commonly used to describe this item.
     # For example "soda" or "pop" for "carbonated beverages".
@@ -173,9 +146,7 @@ class Language(models.Model):
 
 
 class LanguageDescription(models.Model):
-    id = UUIDField(auto=True, primary_key=True)
-
-    factor_code = models.CharField(max_length=5, unique=True)
+    factor_code = models.CharField(max_length=5, primary_key=True)
     description = models.TextField()
 
     __repr__ = sane_repr('factor_code', 'description')
@@ -281,19 +252,3 @@ class Footnote(models.Model):
 
     __repr__ = sane_repr('type', 'nutrient')
     __str__ = sane_str('text')
-
-
-# are provided, which are the first two common measures in the Weight file for each NDB
-# number. To obtain values per one of the common measures, multiply the value in the
-# desired nutrient field by the value in the desired common measure field and divide by
-# 100. For example, to calculate the amount of fat in 1 tablespoon of butter (NDB No. 01001):
-
-# VH=(N*CM)/100
-# where:
-# VH = the nutrient content per the desired common measure,
-# N = the nutrient content per 100 g,
-# For NDB No. 01001, fat = 81.11 g/100 g
-# CM = grams of the common measure.
-# For NDB No. 01001, 1 tablespoon = 14.2 g
-# So using this formula for the above example:
-# VH = (81.11*14.2)/100 = 11.52 g fat in 1 tablespoon of butter
