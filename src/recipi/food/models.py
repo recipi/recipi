@@ -8,11 +8,16 @@ from recipi.utils.db.uuid import UUIDField
 
 
 class FoodGroup(models.Model):
-    # 4-digit code identifying a food group. Only
-    # the first 2 digits are currently assigned.
-    code = models.CharField(max_length=4, primary_key=True)
+    code = models.CharField(
+        _('Code'),
+        max_length=4, primary_key=True,
+        help_text=_(
+            '4-digit code identifying a food group. Only'
+            ' the first 2 digits are currently assigned.'
+        )
+    )
 
-    name = models.CharField(max_length=60)
+    name = models.CharField(_('Name'), max_length=60)
 
     __repr__ = sane_repr('code', 'name')
     __str__ = sane_str('name')
@@ -24,14 +29,7 @@ class Food(models.Model):
     Also contains common names, manufacturer name, scientific name,
     percentage and description of refuse and factors used for calculating
     protein and kilocalories, if applicable.
-
-    Links to the Food Group Description file by the FdGrp_Cd field
-    Links to the Nutrient Data file by the NDB_No field
-    Links to the Weight file by the NDB_No field
-    Links to the Footnote file by the NDB_No field
-    Links to the LanguaL Factor file by the NDB_No field
     """
-    #
     ndb_number = models.CharField(
         _('NDB Number'),
         max_length=5, primary_key=True,
@@ -40,11 +38,10 @@ class Food(models.Model):
         )
     )
 
-    # NOTE: In database import identified by the 4-digit code in `FoodGroup.code`
-    food_group = models.ForeignKey(label=_('Food Group'), FoodGroup)
+    food_group = models.ForeignKey(FoodGroup, verbose_name=_('Food Group'))
 
     name = models.TextField(
-        label=_('Name'),
+        _('Name'),
         help_text=_('of this food item')
     )
 
@@ -62,69 +59,63 @@ class Food(models.Model):
         )
     )
 
-    # Other names commonly used to describe this item.
-    # For example "soda" or "pop" for "carbonated beverages".
-    common_names = TextArrayField(blank=True)
+    common_names = TextArrayField(
+        verbose_name=_('Common Names'),
+        blank=True,
+        help_text=_(
+            'Other names commonly used to describe this item.'
+            ' For example "soda" or "pop" for "carbonated beverages".'
+        )
+    )
 
-    manufacturer_name = models.TextField(blank=True)
+    manufacturer_name = models.TextField(_('Manufacturer Name'), blank=True)
 
-    # Indicates if the food item is used in the USDA Food and Nutrient Database
-    # for Dietary Studies (FNDDS) and thus has a complete nutrient profile
-    # for the 65 FNDDS nutrients.
-    # TODO: find out what to do with that information.
-    survey = models.NullBooleanField(default=None, blank=True)
+    survey = models.NullBooleanField(
+        _('Has Survey?'),
+        default=None, blank=True,
+        help_text=_(
+            'Indicates if the food item is used in the USDA Food and Nutrient Database'
+            ' for Dietary Studies (FNDDS) and thus has a complete nutrient profile'
+            ' for the 65 FNDDS nutrients.'
+        )
+    )
 
-    # Description of inedible parts of a food item (refuse), such as seeds or bone.
-    refuse_description = models.TextField(blank=True)
+    refuse_description = models.TextField(
+        _('Refuse Description'),
+        blank=True,
+        help_text=_(
+            'Description of inedible parts of a food item (refuse), such as seeds or bone.'
+        )
+    )
 
-    # Percentage of refuse. (2-digit, no floating point.)
-    refuse_percentage = models.PositiveIntegerField(default=None, null=True, blank=True)
+    refuse_percentage = models.PositiveIntegerField(
+        _('Percentage of refuse'),
+        default=None, null=True, blank=True
+    )
 
-    # TODO: Write down summary of those paragraphs:
+    nitrogen_factor = models.DecimalField(
+        _('Nitrogen Factor'),
+        max_digits=4, decimal_places=2, default=0.0,
+        help_text=_('Factor for converting nitrogen to protein')
+    )
 
-    # The general factor of 6.25 is used to calculate protein in items that do not
-    # have a specific factor.
-    # Protein values for chocolate, cocoa, coffee, mushrooms, and yeast were adjusted for
-    # non-protein nitrogenous material (Merrill and Watt, 1973). The adjusted protein
-    # conversion factors used to calculate protein for these items are as follows:
-    # chocolate and cocoa 4.74
-    # coffee 5.3
-    # mushrooms 4.38
-    # yeast 5.7
+    protein_factor = models.DecimalField(
+        _('Protein Factor'),
+        max_digits=4, decimal_places=2, default=0.0,
+        help_text=_('Factor for calculating calories from protein')
+    )
 
-    # For soybeans, nitrogen values were multiplied by a factor of 5.71 (Jones, 1941) to
-    # calculate protein. The soybean industry, however, uses 6.25 to calculate protein. To
-    # convert these values divide the proteins value by 5.71, and then multiply the resulting
-    # value by 6.25. It will also be necessary to adjust the value for carbohydrate by
-    # difference (Nutr. No. 205).
+    fat_factor = models.DecimalField(
+        _('Fat Factor'),
+        max_digits=4, decimal_places=2, default=0.0,
+        help_text=_('Factor for calculating calories from fat')
+    )
 
-    # Food Energy. Food energy is expressed in kilocalories (kcal) and kilojoules (kJ). One
-    # kcal equals 4.184 kJ. The data represent physiologically available energy, which is the
-    # energy value remaining after digestive and urinary losses are deducted from gross
-
-    # Calorie factors for protein, fat, and carbohydrates are included in the Food Description
-    # file. For foods containing alcohol, a factor of 6.93 is used to calculate kilocalories per
-    # gram of alcohol (Merrill and Watt, 1973). No calorie factors are given for items prepared
-    # using the recipe program of the NDBS. Instead, total kilocalories for these items equal
-    # the sums of the kilocalories contributed by each ingredient after adjustment for changes
-    # in yield, as appropriate. For multi-ingredient processed foods, if the kilocalories
-    # calculated by the manufacturer are reported, no calorie factors are given.
-
-    # Calorie factors for fructose and sorbitol, not available in the Atwater system,
-    # are derived from the work of Livesay and Marinos (1988). Calorie factors
-    # for coffee and tea are estimated from those for seeds and vegetables, respectively.
-
-    # Factor for converting nitrogen to protein (see above)
-    nitrogen_factor = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
-
-    # Factor for calculating calories from protein (see above)
-    protein_factor = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
-
-    # Factor for calculating calories from fat (see above)
-    fat_factor = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
-
-    # Factor for calculating calories from carbohydrate
-    carbohydrate_factor = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)
+    carbohydrate_factor = models.DecimalField(
+        _('Carbohydrate Factor'),
+        max_digits=4, decimal_places=2, default=0.0,
+        help_text=_('Factor for calculating calories from carbohydrate')
+    )
 
     __repr__ = sane_repr('ndb_number', 'food_group', 'name')
     __str__ = sane_str('name')
@@ -135,8 +126,11 @@ class Language(models.Model):
 
     food = models.ForeignKey(Food)
 
-    # The LanguaL factor from the Thesaurus
-    factor_code = models.CharField(max_length=5)
+    factor_code = models.CharField(
+        _('Factor Code'),
+        max_length=5,
+        help_text=_('The LanguaL factor from the Thesaurus')
+    )
 
     __repr__ = sane_repr('food', 'factor_code')
     __str__ = sane_str('factor_code', 'food')
@@ -146,8 +140,8 @@ class Language(models.Model):
 
 
 class LanguageDescription(models.Model):
-    factor_code = models.CharField(max_length=5, primary_key=True)
-    description = models.TextField()
+    factor_code = models.CharField(_('Factor Code'), max_length=5, primary_key=True)
+    description = models.TextField('Description')
 
     __repr__ = sane_repr('factor_code', 'description')
     __str__ = sane_str('factor_code', 'description')
@@ -158,28 +152,42 @@ class Nutrient(models.Model):
 
     food = models.ForeignKey(Food)
 
-    nutrient_id = models.CharField(max_length=3)
+    nutrient_id = models.CharField(_('Nutrient ID'), max_length=3)
+    name = models.CharField(_('Name'), max_length=60, blank=True)
 
-    # Amount in 100 grams, edible portion †.
-    nutrient_value = models.DecimalField(max_digits=10, decimal_places=3)
+    nutrient_value = models.DecimalField(
+        _('Nutrient Value'),
+        max_digits=10, decimal_places=3,
+        help_text=_('Amount in 100 grams, edible portion †.')
+    )
 
-    # Units of measure (mg, g, μg, etc)
-    unit = models.CharField(max_length=7)
+    unit = models.CharField(
+        _('Unit'),
+        max_length=7,
+        help_text=_('Units of measure (mg, g, μg, etc)')
+    )
 
-    # Name of nutrient/food component.
-    description = models.CharField(max_length=60, blank=True)
+    decimal_places = models.PositiveIntegerField(
+        _('Decimal Places'),
+        help_text=_('Number of decimal places to which a nutrient value is rounded.')
+    )
 
-    # Number of decimal places to which a nutrient value is rounded.
-    decimal_places = models.PositiveIntegerField()
+    ordering = models.PositiveIntegerField(
+        _('Ordering'),
+        help_text=_('Used for correct ordering in nutrition information.')
+    )
 
-    # Used for correct ordering
-    ordering = models.PositiveIntegerField()
-
-    min = models.DecimalField(max_digits=10, decimal_places=3)
-    max = models.DecimalField(max_digits=10, decimal_places=3)
-    degrees_of_freedon = models.PositiveIntegerField()
-    lower_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
-    upper_error_bound = models.DecimalField(max_digits=10, decimal_places=3)
+    min = models.DecimalField(_('Min'), max_digits=10, decimal_places=3)
+    max = models.DecimalField(_('Max'), max_digits=10, decimal_places=3)
+    degrees_of_freedom = models.PositiveIntegerField(_('Degrees of Freedom'))
+    lower_error_bound = models.DecimalField(
+        _('Lower Error Bound'),
+        max_digits=10, decimal_places=3
+    )
+    upper_error_bound = models.DecimalField(
+        _('Upper Error Bound'),
+        max_digits=10, decimal_places=3
+    )
 
     __repr__ = sane_repr('description', 'nutrient_value', 'unit')
     __str__ = sane_str('food', 'description', 'nutrient_value', 'unit')
@@ -194,19 +202,30 @@ class Weight(models.Model):
 
     food = models.ForeignKey(Food)
 
-    sequence = models.PositiveIntegerField()
+    sequence = models.PositiveIntegerField(_('Sequence'))
 
-    # Unit modifier (for example 1 in "1 cup")
-    amount = models.DecimalField(max_digits=5, decimal_places=2)
+    amount = models.DecimalField(
+        _('Amount'),
+        max_digits=5, decimal_places=2,
+        help_text=_('Unit modifier (for example 1 in "1 cup")')
+    )
 
-    # Description (for example, cup, diced, and 1-inch pieces)
-    description = models.TextField()
+    description = models.TextField(
+        _('Description'),
+        help_text=_('Description (for example, cup, diced, and 1-inch pieces)')
+    )
 
-    # Weight in gram
-    weight = models.DecimalField(max_digits=7, decimal_places=2)
+    weight = models.DecimalField(
+        _('Weight'),
+        max_digits=7, decimal_places=2,
+        help_text=_('Weight in gram')
+    )
 
-    # Standard deviation
-    deviation = models.DecimalField(max_digits=7, decimal_places=3, default=0.0)
+    deviation = models.DecimalField(
+        _('Deviation'),
+        max_digits=7, decimal_places=3, default=0.0,
+        help_text=_('Standard deviation')
+    )
 
     __repr__ = sane_repr('food', 'description', 'amount', 'weight')
     __str__ = sane_str('food', 'description', 'amount', 'weight')

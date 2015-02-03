@@ -154,7 +154,7 @@ def process_nutrient(basepath, verbose):
 
             definitions[row['nutr_no']] = {
                 'unit': row['units'],
-                'description': row['nutr_desc'],
+                'name': row['nutr_desc'],
                 'decimal_places': row['num_desc'],
                 'ordering': row['sr_order']
             }
