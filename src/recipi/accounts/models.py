@@ -81,7 +81,7 @@ class User(AbstractBaseUser):
         return reverse('recipi-profile', kwargs={'email': self.email})
 
     def get_display_name(self):
-        return self.name or self.email
+        return self.name
 
     def get_short_name(self):
         return self.get_display_name()
