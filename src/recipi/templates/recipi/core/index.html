@@ -1,5 +1,5 @@
 {% extends "recipi/base.html" %}
-{% load i18n static %}
+{% load i18n static json %}
 
 {% block main-content %}
     <div class="row">
@@ -13,4 +13,10 @@
             </h3>
         </div>
     </div>
+    <div class="row">
+        <div class="small-12 medium-12 large-12 columns">
+            <h3>User Info on Tumblr</h3>
+            <pre>
+                {{ user_info|pretty_json }}
+            </pre>
 {% endblock %}
