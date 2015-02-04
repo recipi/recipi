@@ -177,7 +177,7 @@ def process_nutrient(basepath, verbose):
                 'nutrient_value': float(row.get('nutr_val', 0.0) or 0.0),
                 'min': float(row.get('min', 0.0) or 0.0),
                 'max': float(row.get('max', 0.0) or 0.0),
-                'degrees_of_freedon': int(row.get('df', 0) or 0),
+                'degrees_of_freedom': int(row.get('df', 0) or 0),
                 'lower_error_bound': float(row.get('low_eb', 0.0) or 0.0),
                 'upper_error_bound': float(row.get('up_eb', 0.0) or 0.0),
             }
