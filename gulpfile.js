@@ -105,7 +105,7 @@ gulp.task('watch', function () {
 	livereload.listen();
 });
 
-gulp.task('build', ['validate', 'scss']);
+gulp.task('build', ['validate', 'js', 'scss']);
 
 gulp.task('default', ['build']);
 
