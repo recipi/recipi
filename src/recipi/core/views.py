@@ -11,14 +11,15 @@ class IndexView(TemplateView):
 
         user = self.request.user
 
-        social_account = user.socialaccount_set.get(provider='tumblr')
-        social_token = social_account.socialtoken_set.get(app__provider='tumblr')
+        if user.is_authenticated():
+            social_account = user.socialaccount_set.get(provider='tumblr')
+            social_token = social_account.socialtoken_set.get(app__provider='tumblr')
 
-        tumblr = Tumblpy(
-            app_key=social_token.app.client_id,
-            app_secret=social_token.app.secret,
-            oauth_token=social_token.token,
-            oauth_token_secret=social_token.token_secret)
+            tumblr = Tumblpy(
+                app_key=social_token.app.client_id,
+                app_secret=social_token.app.secret,
+                oauth_token=social_token.token,
+                oauth_token_secret=social_token.token_secret)
 
-        context['user_info'] = tumblr.post('user/info')
+            context['user_info'] = tumblr.post('user/info')
         return context
