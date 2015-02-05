@@ -83,7 +83,7 @@ gulp.task('validate:js', function () {
 gulp.task('js', function() {
 	browserify(src.js + '/src/app.js', {debug: true})
 		.transform(to5ify)
-		.bundle()
+		.bundle({debug: true})
 		.on('error', gutil.log.bind(gutil, 'Browserify Error'))
 		.pipe(source('bundle.js'))
 		.pipe(buffer())
