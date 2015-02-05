@@ -30,8 +30,9 @@
   },
   "browser": {
     "modernizr": "./src/recipi/static/js/vendor/modernizr.js",
-    "foundation": "./node_modules/zurb-foundation-5/js/foundation/foundation.js",
-    "jquery": "./node_modules/jquery/dist/jquery.js"
+    "foundation": "./bower_components/foundation/js/foundation.js",
+    "jquery": "./bower_components/jquery/dist/jquery.js",
+    "backbone": "./bower_components/backbone/backbone.js"
   },
   "browserify-shim": {
     "jquery": {
