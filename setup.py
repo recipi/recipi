@@ -63,6 +63,9 @@ install_requires = [
     'numpy>=1.9.1,<2.0',
     'python-dateutil>=2.4.0,<2.5',
     'textblob>=0.9.0,<1.0',
+
+    # Tumblr API
+    'python-tumblpy>=1.0.4,<1.1'
 ]
 
 dev_requires = [
