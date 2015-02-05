@@ -8,6 +8,9 @@ urlpatterns = [
     url(r'^$',
         core_views.IndexView.as_view(),
         name='recipi-index'),
+    url(r'^editor/$',
+        core_views.EditorView.as_view(),
+        name='recipi-editor'),
 
     url(r'^account/', include('allauth.urls')),
 

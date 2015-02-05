@@ -23,3 +23,7 @@ class IndexView(TemplateView):
 
             context['user_info'] = tumblr.post('user/info')
         return context
+
+
+class EditorView(TemplateView):
+    template_name = 'recipi/recipes/editor.html'

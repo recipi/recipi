@@ -39,5 +39,11 @@ body {
 	line-height: $base-line-height;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-    background-color: #fff;
+	background-color: #fff;
+}
+
+
+#editor {
+    position: relative;
+    height: 300px;
 }

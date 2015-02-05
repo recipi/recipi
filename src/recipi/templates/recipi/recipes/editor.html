@@ -1,0 +1,24 @@
+{% extends "recipi/base.html" %}
+{% load i18n static json %}
+
+{% block main-content %}
+    <div class="row">
+        <div class="small-12 medium-12 large-12 columns">
+            <div id="editor">
+
+# Headline
+
+ * List
+ * List
+
+
+----
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+{% endblock %}
