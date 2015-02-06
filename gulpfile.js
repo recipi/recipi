@@ -28,31 +28,31 @@ var gulp = require('gulp'),
 /**
  * Cleaning css directory
  */
- gulp.task('clean:css', function (done) {
- 	del(dest.css, done);
- });
+gulp.task('clean:css', function (done) {
+	del(dest.css, done);
+});
 
 /**
  * Cleaning js directory
  */
- gulp.task('clean:js', function (done) {
- 	del(dest.js, done);
- });
+gulp.task('clean:js', function (done) {
+	del(dest.js, done);
+});
 
 /**
  * Compiling sass/scss files to css
  */
- gulp.task('scss', ['clean:css'], function () {
- 	return gulp.src(src.scss + '/*.scss')
-	 	.pipe(plugins.plumber())
-	 	.pipe(plugins.sourcemaps.init())
-	 	.pipe(plugins.sass({
-	 		includePaths: [src.foundation]
-	 	}))
-	 	.pipe(plugins.sourcemaps.write('./'))
-	 	.pipe(gulp.dest(dest.css))
-	 	.pipe(livereload());
- });
+gulp.task('scss', ['clean:css'], function () {
+	return gulp.src(src.scss + '/*.scss')
+		.pipe(plugins.plumber())
+		.pipe(plugins.sourcemaps.init())
+		.pipe(plugins.sass({
+			includePaths: [src.foundation]
+		}))
+		.pipe(plugins.sourcemaps.write('./'))
+		.pipe(gulp.dest(dest.css))
+		.pipe(livereload());
+});
 
 /**
 * Validating scss files
