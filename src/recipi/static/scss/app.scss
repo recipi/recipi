@@ -42,8 +42,39 @@ body {
 	background-color: #fff;
 }
 
+section[role="header"] {
+	position: relative;
+	top: 10px;
+}
+
+
+.top-bar-section {
+	li:not(.has-form) {
+		a:not(.button) {
+			background-color: #fff;
+
+			&:hover {
+				background-color: #fff;
+			}
+		}
+	}
+}
+
+a.avatar {
+	img {
+		border-radius: 50%;
+		box-shadow: 0 0 0 2px #fff, 0 0 0 3px #999, 0 1px 4px 3px rgba(0,0,0,.2);
+		margin-right: 5px;
+	}
+
+	&:hover {
+		img {
+			box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
+		}
+	}
+}
 
 #editor {
-    position: relative;
-    height: 300px;
+	position: relative;
+	height: 300px;
 }
