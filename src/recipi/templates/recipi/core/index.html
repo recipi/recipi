@@ -15,8 +15,12 @@
     </div>
     <div class="row">
         <div class="small-12 medium-12 large-12 columns">
-            <h3>User Info on Tumblr</h3>
-            <pre>
-                {{ user_info|pretty_json }}
-            </pre>
+            {% if user_info %}
+                <h3>User Info on Tumblr</h3>
+                <pre>
+                    {{ user_info|pretty_json }}
+                </pre>
+            {% else %}
+                <strong>You're not logged in on tumblr.</strong>
+            {% endif %}
 {% endblock %}
