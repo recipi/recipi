@@ -13,6 +13,7 @@ class FoodGroupAdmin(admin.ModelAdmin):
 
 @admin.register(Food)
 class FoodAdmin(admin.ModelAdmin):
+    list_display = ('name',)
     search_fields = (
         'ndb_number', 'name', 'short_name',
         'common_names', 'manufacturer_name'
