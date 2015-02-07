@@ -10,7 +10,7 @@ US_UNITS = {
         'plural': _('cups'),
         'abbreviation': 'c',
         'type': VOLUME,
-        'aliases': ()
+        'aliases': ('c.',),
     },
     'us liquid pint': {
         'name': _('pint'),
@@ -24,7 +24,7 @@ US_UNITS = {
         'plural': _('quarts'),
         'abbreviation': 'q',
         'type': VOLUME,
-        'aliases': ()
+        'aliases': ('qt', 'qts')
     },
     'us gallon': {
         'name': _('gallon'),
@@ -52,7 +52,7 @@ US_UNITS = {
         'plural': _('fluid ounces'),
         'abbreviation': 'fl oz',
         'type': VOLUME,
-        'aliases': (),
+        'aliases': ('fl. oz',),
     }
 }
 
@@ -98,7 +98,7 @@ SI_UNITS = {
         'plural': _('grams'),
         'abbreviation': 'g',
         'type': WEIGHT,
-        'aliases': (),
+        'aliases': ('gr', 'gr.', 'g.'),
     },
     'centigram': {
         'name': _('centigram'),
@@ -122,14 +122,14 @@ COMMON_UNITS = {
         'plural': _('tablespoons'),
         'abbreviation': 'T',
         'type': VOLUME,
-        'aliases': ('tbsp', 'tb'),
+        'aliases': ('tbsp', 'tbsp.', 'T', 'T.', 'tbs', 'tbs.', 'tb'),
     },
     'teaspoon': {
         'name': _('teaspoon'),
         'plural': _('teaspoons'),
         'abbreviation': 't',
         'type': VOLUME,
-        'aliases': ('tsp',),
+        'aliases': ('tsp', 'tsp.', 't', 't.',),
     },
     'slice': {
         'name': _('slice'),
@@ -224,3 +224,36 @@ ALL_UNITS.update(SI_UNITS)
 ALL_UNITS.update(US_UNITS)
 
 UNIT_CHOICES = tuple((key, value['name']) for key, value in ALL_UNITS.items())
+
+NUMBERS = {
+    'a': 1,
+    'an': 1,
+    'zero': 0,
+    'one': 1,
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5,
+    'six': 6,
+    'seven': 7,
+    'eight': 8,
+    'nine': 9,
+    'ten': 10,
+    'eleven': 11,
+    'twelve': 12,
+    'thirteen': 13,
+    'fourteen': 14,
+    'fifteen': 15,
+    'sixteen': 16,
+    'seventeen': 17,
+    'eighteen': 18,
+    'nineteen': 19,
+    'twenty': 20,
+    'thirty': 30,
+    'forty': 40,
+    'fifty': 50,
+    'sixty': 60,
+    'seventy': 70,
+    'eighty': 80,
+    'ninety': 9,
+}
