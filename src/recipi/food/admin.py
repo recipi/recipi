@@ -14,7 +14,7 @@ class FoodGroupAdmin(admin.ModelAdmin):
 @admin.register(Food)
 class FoodAdmin(admin.ModelAdmin):
     search_fields = (
-        'ndb_number', 'food_group__name', 'name', 'short_name',
+        'ndb_number', 'name', 'short_name',
         'common_names', 'manufacturer_name'
     )
 
