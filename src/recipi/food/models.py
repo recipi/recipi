@@ -197,7 +197,14 @@ class Nutrient(models.Model):
 
 
 class Weight(models.Model):
-    """Contains the weight in grams of a number of common measures for each food item."""
+    """
+    A Weight is a common measure of a food item that contains a factor for
+    multiplying a FoodNutrient.Value to get the Value in common units.
+
+    The formula is N = (V*W) / 100
+      N = nutrient value for household measure.
+      V = nutrient value per 100g.
+    """
     id = UUIDField(auto=True, primary_key=True)
 
     food = models.ForeignKey(Food)
