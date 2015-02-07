@@ -15,7 +15,7 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey('Recipe')
     ingredient = models.ForeignKey(Ingredient)
 
-    metric_unit = models.CharField(max_length=3, choices=UNIT_CHOICES)
+    unit = models.CharField(max_length=3, choices=UNIT_CHOICES)
     amount = models.PositiveIntegerField()
 
 
