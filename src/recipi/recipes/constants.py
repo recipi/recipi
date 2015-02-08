@@ -257,3 +257,21 @@ NUMBERS = {
     'eighty': 80,
     'ninety': 9,
 }
+
+
+FOOD_ADJECTIVES = frozenset((
+    'drained', 'sifted', 'ripe', 'sliced', 'medium', 'large', 'small',
+    'frozen', 'roasted', 'coarsely', 'chopped', 'seasoned', 'sliced',
+    'softened', 'slightly', 'beaten', 'torn', 'light', 'pure', 'peeled',
+    'stale', 'piece', 'fresh', 'shredded', 'thawed', 'lightly', 'mild',
+    'thinly', 'crumbled', 'minced', 'size', 'pitted', 'firmly', 'packed',
+    'cooked', 'baby', 'ground', 'hot', 'dried', 'cubed', 'grated', 'cold',
+    'boiling', 'diced', 'slivered', 'crushed', 'warm', 'finely', 'freshly',
+    'hard-cooked', 'water-packed', 'low-fat', 'fat-free', 'reduced-fat',
+    'reduced-sodium', 'ready-to-serve', 'quick-cooking', 'day-old',
+    'pre-baked', 'melted', 'stewed', 'uncooked', 'blanched', 'fresh-ground',
+    'cut-up', 'julienned', 'toasted', 'snipped', 'minced', 'wrapped', 'mashed',
+    'additional', 'individually', 'firm', 'miniature', 'refrigerated',
+    'thick', 'regular', 'scalded', 'cored', 'unpeeled', 'rubbed', 'canned',
+    'and', 'or'
+))

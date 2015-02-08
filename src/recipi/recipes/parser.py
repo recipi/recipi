@@ -33,32 +33,34 @@ from fractions import Fraction
 import django
 django.setup()
 
+import pyparsing
+
 from nltk.corpus import wordnet
 from nltk.stem.wordnet import WordNetLemmatizer
 
-from recipi.recipes.constants import ALL_UNITS
+from recipi.recipes.constants import ALL_UNITS, FOOD_ADJECTIVES
 
 
 lemmatizer = WordNetLemmatizer()
 
-units = []
-reversed_units = {}
+units_of_measure = []
+reversed_units_of_measure = {}
 
 for descr, unit in ALL_UNITS.items():
-    units.append(str(unit['name']))
-    reversed_units[str(unit['name'])] = descr
+    units_of_measure.append(str(unit['name']))
+    reversed_units_of_measure[str(unit['name'])] = descr
 
     if unit['abbreviation']:
-        reversed_units[unit['abbreviation']] = descr
-        units.append(unit['abbreviation'])
+        reversed_units_of_measure[unit['abbreviation']] = descr
+        units_of_measure.append(unit['abbreviation'])
 
     for alias in unit['aliases']:
-        units.append(alias)
-        reversed_units[alias] = descr
+        units_of_measure.append(alias)
+        reversed_units_of_measure[alias] = descr
 
 
 _amount_re = '([1-9]+\d*\s)?((\d+)\/(\d+)\s+)?'
-_units_re = '|'.join(sorted(units, key=len, reverse=True))
+_units_of_measure_re = '|'.join(sorted(units_of_measure, key=len, reverse=True))
 
 
 ingredient_line_regex = re.compile(''.join((
@@ -66,12 +68,12 @@ ingredient_line_regex = re.compile(''.join((
     ('(?P<pre_detail>\('
         '(?P<pre_detail_amount>{amount_regex})?'
         '(?P<pre_detail_unit>{unit_regex}\s*)?'
-    '\)\s+)?'.format(amount_regex=_amount_re, unit_regex=_units_re)),
-    '(?P<unit>(?:{regex})\s+)?'.format(regex=_units_re),
+    '\)\s+)?'.format(amount_regex=_amount_re, unit_regex=_units_of_measure_re)),
+    '(?P<unit>(?:{regex})\s+)?'.format(regex=_units_of_measure_re),
     ('(?P<post_detail>\('
         '(?P<post_detail_amount>{amount_regex})?'
         '(?P<post_detail_unit>{unit_regex}\s*)?'
-    '\))?'.format(amount_regex=_amount_re, unit_regex=_units_re)),
+    '\))?'.format(amount_regex=_amount_re, unit_regex=_units_of_measure_re)),
     '\s*(?P<ingredients>[a-z \-,]+)'
 )))
 
