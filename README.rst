@@ -89,6 +89,15 @@ Superuser
 Import nutrition data and recipes
 ---------------------------------
 
+To import a pre-defined fixture:
+
+.. code-block:: bash
+
+    $ gunzip resources/fixtures/food.json.gz
+    $ python manage.py loaddata resources/fixtures/food.json
+
+Or to freshly import all data:
+
 .. code-block:: bash
 
     $ python import.py
