@@ -28,16 +28,16 @@ x no unit at all, for countable ingredients (as in "three lemons")
 
 """
 import re
+import itertools
 from fractions import Fraction
 
 import django
 django.setup()
 
-import pyparsing
-
 from nltk.corpus import wordnet
 from nltk.stem.wordnet import WordNetLemmatizer
 
+from recipi.food.models import Food
 from recipi.recipes.constants import ALL_UNITS, FOOD_ADJECTIVES
 
 
@@ -92,22 +92,46 @@ def is_ingredient(word, ingredients):
     >>> is_ingredient('dish')
     False
     """
-    # TODO: Integrate more details, allow for more variation.
     reject_synsets = ['meal.n.01', 'meal.n.02', 'dish.n.02', 'vitamin.n.01']
     reject_synsets = set(wordnet.synset(w) for w in reject_synsets)
+
     accept_synsets = ['food.n.01', 'food.n.02']
     accept_synsets = set(wordnet.synset(w) for w in accept_synsets)
+
     for word_synset in wordnet.synsets(word, wordnet.NOUN):
         all_synsets = set(word_synset.closure(lambda s: s.hypernyms()))
         all_synsets.add(word_synset)
+
         for synset in reject_synsets:
             if synset in all_synsets:
                 return False
+
         for synset in accept_synsets:
             if synset in all_synsets:
                 return True
 
+    if word in FOOD_ADJECTIVES:
+        return False
+
     return word in ingredients
+
+
+def get_simplfied_ingredient_list():
+    result = set()
+
+    names = set(Food.objects.values_list('name', flat=True))
+    names.update(itertools.chain.from_iterable(
+        Food.objects.values_list('name', flat=True)))
+    names = (word for word in names if word)
+
+    for name in names:
+        filtered = set(
+            word for word in normalize(name).split()
+            if is_ingredient(word, ()))
+
+        result.update(filtered)
+
+    return result
 
 
 def normalize(string):
