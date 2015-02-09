@@ -5,7 +5,7 @@ from urllib.parse import urlencode
 
 SECURE_BASE_URL = 'https://secure.gravatar.com/avatar/'
 PROFILE_URL = 'http://www.gravatar.com/'
-FACEBOOK_URL = 'http://graph.facebook.com/{}/picture?width=40&height=40'
+FACEBOOK_URL = 'http://graph.facebook.com/{}/picture?width=240&height=240'
 RATINGS = ('g', 'pg', 'r', 'x')
 MAX_SIZE = 512
 MIN_SIZE = 1
@@ -16,7 +16,7 @@ def email_hash(string):
     return md5(str(string.strip().lower()).encode('utf-8')).hexdigest()
 
 
-def get_gravatar(email, rating='g', size=40, default='mm'):
+def get_gravatar(email, rating='g', size=240, default='mm'):
     """Generate a link to the users' Gravatar."""
     assert rating.lower() in RATINGS
     assert MIN_SIZE <= size <= MAX_SIZE
