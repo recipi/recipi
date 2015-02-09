@@ -62,7 +62,6 @@
 					</ul>
 				</section>
 			</nav>
-		</section>
 	{% endblock %}
 
 	{% block messages %}
@@ -81,6 +80,12 @@
 	{% block content %}
 		<section role="main-content">
 			<div class="row">
+				<div class="search-box small-6 medium-6 large-6 small-centered medium-centered large-centered column">
+					<form action="">
+						<input type="text" placeholder="I want to eat...">
+					</form>
+				</div>
+
 				<div class="small-12 medium-12 large-12 columns">
 					{% block main-content %}
 					{% endblock %}
