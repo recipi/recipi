@@ -31,9 +31,6 @@ import re
 import itertools
 from fractions import Fraction
 
-import django
-django.setup()
-
 from nltk.corpus import wordnet
 from nltk.stem.wordnet import WordNetLemmatizer
 
