@@ -14,10 +14,10 @@
 @import "foundation/components/labels";
 @import "foundation/components/visibility";
 
-// @import "glyphicons_filetypes";
+// @import "icons/glyphicons_filetypes";
 @import "icons/glyphicons_social";
-// @import "glyphicons_halflings";
-// @import "glyphicons_regular";
+// @import "icons/glyphicons_halflings";
+@import "icons/glyphicons_regular";
 
 
 @mixin default-typo() {
@@ -86,4 +86,8 @@ footer {
 	bottom: 0;
 	width: 100%;
 	height: 100px;
+}
+
+.about {
+	text-align: right;
 }
