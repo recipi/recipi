@@ -44,17 +44,20 @@ body {
 
 section[role="header"] {
 	position: relative;
-	top: 10px;
 }
 
+
+.top-bar {
+	border-bottom: 1px solid #e5e5e5;
+}
 
 .top-bar-section {
 	li:not(.has-form) {
 		a:not(.button) {
-			background-color: #fff;
+			background-color: $topbar-bg-color;
 
 			&:hover {
-				background-color: #fff;
+				background-color: $topbar-bg-color;
 			}
 		}
 	}
@@ -62,7 +65,7 @@ section[role="header"] {
 
 a.avatar {
 	img {
-		width: 40px;
+		width: 30px;
 		border-radius: 50%;
 		box-shadow: 0 0 0 2px #fff, 0 0 0 3px #999, 0 1px 4px 3px rgba(0,0,0,.2);
 		margin-right: 5px;
