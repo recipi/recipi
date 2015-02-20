@@ -1,5 +1,6 @@
 from django.db import models
 from timedelta import fields as timedelta_fields
+from djorm_pgarray.fields import TextArrayField
 
 from recipi.recipes.constants import UNIT_CHOICES
 from recipi.utils.db.uuid import UUIDField
@@ -55,6 +56,8 @@ class Recipe(models.Model):
         related_name='recipes',
         blank=True
     )
+
+    tags = TextArrayField(null=True, blank=True)
 
     # We're always talking about a one serving per 'Person' here.
     servings = models.PositiveIntegerField()

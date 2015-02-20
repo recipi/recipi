@@ -1,6 +1,9 @@
+import uuid
+
 import pytest
 from django.db.utils import DataError
 
+from recipi.recipes.models import Recipe
 from recipi.tests.factories.recipes import RecipeFactory
 
 
@@ -21,3 +24,20 @@ class TestRecipeModel:
 
         with pytest.raises(DataError):
             RecipeFactory.create(title=too_long)
+
+    def test_recipe_has_uuid_as_primary_key(self):
+        recipe = RecipeFactory.create()
+
+        # raises on invalid uuid
+        uuid.UUID(str(recipe.pk))
+
+    def test_recipe_can_have_tags(self):
+        recipe = RecipeFactory.create()
+
+        # defaults to empty list.
+        assert recipe.tags is None
+
+        recipe.tags = ['tag1', 'tag2']
+        recipe.save()
+
+        assert Recipe.objects.get(pk=recipe.pk).tags == ['tag1', 'tag2']
