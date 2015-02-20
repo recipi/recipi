@@ -71,12 +71,7 @@ WSGI_APPLICATION = 'recipi.wsgi.application'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'recipi_dev',
-    }
-}
+DATABASES = {}
 
 TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
