@@ -56,6 +56,7 @@ before_script:
 
 script:
   - psql --version
+  - mv resources/nltk_data /home/travis/nltk_data
   - make develop
   - make test
 
