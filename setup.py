@@ -67,6 +67,9 @@ install_requires = [
     # Social APIs
     'python-tumblpy>=1.0.4,<1.1',
     'django-allauth>=0.19.1,<0.20',
+
+    # Imaging
+    'Pillow>=2.7.0,<2.8.0',
 ]
 
 dev_requires = [

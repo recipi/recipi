@@ -4,6 +4,7 @@ from djorm_pgarray.fields import TextArrayField
 
 from recipi.recipes.constants import UNIT_CHOICES
 from recipi.utils.db.uuid import UUIDField
+from recipi.utils.files import upload_to
 
 
 class Ingredient(models.Model):
@@ -29,7 +30,7 @@ class Cuisine(models.Model):
 
 
 class Picture(models.Model):
-    pass
+    file = models.ImageField(upload_to=upload_to('recipes/pictures/%S/%W/{0}/{1}'))
 
 
 class Recipe(models.Model):
