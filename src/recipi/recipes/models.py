@@ -19,6 +19,9 @@ class RecipeIngredient(models.Model):
     unit = models.CharField(max_length=3, choices=UNIT_CHOICES)
     amount = models.PositiveIntegerField()
 
+    # Modifiers such as 'chopped' or 'fresh' etc.
+    modifiers = models.TextField()
+
 
 class Cuisine(models.Model):
     id = UUIDField(auto=True, primary_key=True)
