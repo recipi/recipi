@@ -33,8 +33,6 @@ class Recipe(models.Model):
 
     title = models.CharField(max_length=80)
 
-    # TODO: I think we're going to need some kind of shadow-user
-    # account for automatic imports.
     author = models.ForeignKey('accounts.User')
 
     description = models.TextField(blank=True)
@@ -61,6 +59,5 @@ class Recipe(models.Model):
     # We're always talking about a one serving per 'Person' here.
     servings = models.PositiveIntegerField()
 
-    # TODO: Are there any more units we need to measure?
     preparation_time = timedelta_fields.TimedeltaField()
     cook_time = timedelta_fields.TimedeltaField()
