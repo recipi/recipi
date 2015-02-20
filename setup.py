@@ -95,7 +95,7 @@ setup(
     long_description=read('README.rst'),
     author='Benjamin Banduhn, Christopher Grebs',
     author_email='cg@webshox.org',
-    url='https://github.com/EnTeQuAk/recipi/',
+    url='https://github.com/recipi/recipi/',
     package_dir={'': 'src'},
     packages=find_packages('src'),
     include_package_data=True,

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com/EnTeQuAk/recipi.git"
+    "url": "ssh://git@github.com/recipi/recipi.git"
   },
   "private": true,
   "dependencies": {

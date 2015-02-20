@@ -6,8 +6,8 @@ recipi - nutrition database and meal planner.
     :target: https://readthedocs.org/projects/recipi/?badge=latest
     :alt: Documentation Status
 
-.. image:: https://travis-ci.org/EnTeQuAk/recipi.png?branch=master
-    :target: https://travis-ci.org/EnTeQuAk/recipi
+.. image:: https://travis-ci.org/recipi/recipi.png?branch=master
+    :target: https://travis-ci.org/recipi/recipi
 
 .. figure:: https://recipi.readthedocs.org/en/latest/_static/logo.jpg
    :align: right
@@ -28,7 +28,7 @@ Installation
     $ mkvirtualenv recipi
 
     $ # Clone repository
-    $ git clone git@github.com:EnTeQuAk/recipi.git
+    $ git clone git@github.com:recipi/recipi.git
 
     $ # Activate Environment and install. Note that this might take a while
     $ # and actually downloads tons of stuff (used for NLTK)
@@ -139,5 +139,5 @@ Resources
 ---------
 
 * `Documentation <http://recipi.readthedocs.org/>`_
-* `Bug Tracker <https://github.com/EnTeQuAk/recipi/issues>`_
-* `Code <https://github.com/EnTeQuAk/recipi>`_
+* `Bug Tracker <https://github.com/recipi/recipi/issues>`_
+* `Code <https://github.com/recipi/recipi>`_
