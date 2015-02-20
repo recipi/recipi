@@ -38,7 +38,7 @@ develop: deps
 	@python extras/import_cldr.py
 
 	# Download nltk corpus
-	@python -m nltk.downloader all
+	# @python -m nltk.downloader all
 
 
 docs: clean-build
