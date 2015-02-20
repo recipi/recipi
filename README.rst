@@ -24,7 +24,7 @@ Installation
 
 .. code-block:: bash
 
-    $ Create your virtualenv (recommended, use virtualenvwrapper)
+    $ Create your virtualenv
     $ mkvirtualenv recipi
 
     $ # Clone repository
