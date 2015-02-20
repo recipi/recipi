@@ -21,7 +21,8 @@ class RecipeIngredient(models.Model):
 
 
 class Cuisine(models.Model):
-    pass
+    id = UUIDField(auto=True, primary_key=True)
+    name = models.CharField(max_length=80)
 
 
 class Picture(models.Model):
