@@ -272,6 +272,5 @@ FOOD_ADJECTIVES = frozenset((
     'pre-baked', 'melted', 'stewed', 'uncooked', 'blanched', 'fresh-ground',
     'cut-up', 'julienned', 'toasted', 'snipped', 'minced', 'wrapped', 'mashed',
     'additional', 'individually', 'firm', 'miniature', 'refrigerated',
-    'thick', 'regular', 'scalded', 'cored', 'unpeeled', 'rubbed', 'canned',
-    'and', 'or'
+    'thick', 'regular', 'scalded', 'cored', 'unpeeled', 'rubbed', 'canned'
 ))
