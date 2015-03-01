@@ -40,6 +40,7 @@ cases = {
         'unit': 'quart',
         'amount': Fraction('1'),
         'amount_detail': None,
+        'modifiers': '(more if necessary to cover the eggs completely)',
         'ingredients': 'water',
     },
     '2 pounds ground beef': {
@@ -60,11 +61,19 @@ cases = {
         'amount_detail': None,
         'ingredients': 'minced onion',
     },
+    # Same as above but with ½ as the amount identifier.
+    '½ cup minced onion': {
+        'unit': 'cup',
+        'amount': Fraction('0.5'),
+        'amount_detail': None,
+        'ingredients': 'minced onion',
+    },
     '2 eggs, beaten': {
         'unit': 'unknown',
         'amount': Fraction('2'),
         'amount_detail': None,
-        'ingredients': 'eggs, beaten',
+        'modifiers': 'beaten',
+        'ingredients': 'eggs',
     },
     '1 1/2 teaspoons salt': {
         'unit': 'teaspoon',
@@ -223,13 +232,6 @@ cases = {
         'amount': Fraction('4'),
         'amount_detail': {'unit': 'ounce', 'amount': Fraction('4')},
         'ingredients': 'fillet salmon',
-    },
-    # XXX
-    '3 tablespoons prepared Dijon-style mustard salt and pepper to taste': {
-        'unit': 'tablespoon',
-        'amount': Fraction('3'),
-        'amount_detail': None,
-        'ingredients': 'prepared dijon-style mustard salt and pepper to taste',
     },
     '1/4 cup Italian-style dry bread crumbs': {
         'unit': 'cup',
