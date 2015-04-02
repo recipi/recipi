@@ -225,6 +225,11 @@ ALL_UNITS.update(US_UNITS)
 
 UNIT_CHOICES = tuple((key, value['name']) for key, value in ALL_UNITS.items())
 
+
+def get_unit_choices():
+    return UNIT_CHOICES
+
+
 NUMBERS = {
     'a': 1,
     'an': 1,

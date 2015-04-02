@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from djorm_pgarray.fields import TextArrayField
+from django.contrib.postgres.fields import ArrayField
 
 from recipi.utils.db import sane_repr, sane_str
 from recipi.utils.db.uuid import UUIDField
@@ -59,7 +59,8 @@ class Food(models.Model):
         )
     )
 
-    common_names = TextArrayField(
+    common_names = ArrayField(
+        models.TextField(),
         verbose_name=_('Common Names'),
         blank=True,
         help_text=_(

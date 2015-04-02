@@ -1,8 +1,7 @@
 from django.db import models
-from timedelta import fields as timedelta_fields
-from djorm_pgarray.fields import TextArrayField
+from django.contrib.postgres.fields import ArrayField
 
-from recipi.recipes.constants import UNIT_CHOICES
+from recipi.recipes.constants import get_unit_choices
 from recipi.utils.db.uuid import UUIDField
 from recipi.utils.files import upload_to
 
@@ -10,14 +9,14 @@ from recipi.utils.files import upload_to
 class Ingredient(models.Model):
     name = models.CharField(max_length=256)
     food = models.ForeignKey('food.Food', null=True, blank=True)
-    nutrients = models.ManyToManyField('food.Nutrient', null=True, blank=True)
+    nutrients = models.ManyToManyField('food.Nutrient', blank=True)
 
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey('Recipe')
     ingredient = models.ForeignKey(Ingredient)
 
-    unit = models.CharField(max_length=3, choices=UNIT_CHOICES)
+    unit = models.CharField(max_length=3, choices=get_unit_choices)
     amount = models.PositiveIntegerField()
 
     # Modifiers such as 'chopped' or 'fresh' etc.
@@ -62,10 +61,10 @@ class Recipe(models.Model):
         blank=True
     )
 
-    tags = TextArrayField(null=True, blank=True)
+    tags = ArrayField(models.TextField(), blank=True, null=True)
 
     # We're always talking about a one serving per 'Person' here.
     servings = models.PositiveIntegerField()
 
-    preparation_time = timedelta_fields.TimedeltaField()
-    cook_time = timedelta_fields.TimedeltaField()
+    preparation_time = models.DurationField()
+    cook_time = models.DurationField()
